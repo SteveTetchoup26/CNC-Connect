@@ -17,16 +17,16 @@ const Footer = () => {
               Système de Gestion d'Enrôlement des Étudiants
             </p>
             <div className="flex space-x-4 pt-2">
-              <a href="#" className="hover:text-emerald-500 transition-colors">
+              <a href="#" className="hover:text-secondary-hover transition-colors">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="hover:text-emerald-500 transition-colors">
+              <a href="#" className="hover:text-secondary-hover transition-colors">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="hover:text-emerald-500 transition-colors">
+              <a href="#" className="hover:text-secondary-hover transition-colors">
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a href="#" className="hover:text-emerald-500 transition-colors">
+              <a href="#" className="hover:text-secondary-hover transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
             </div>
@@ -37,22 +37,22 @@ const Footer = () => {
             <h3 className="text-white font-semibold text-lg mb-4">Notre Système</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-sm hover:text-emerald-500 transition-colors">
+                <a href="#" className="text-sm hover:text-secondary-hover transition-colors">
                   À propos de SGEE
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-emerald-500 transition-colors">
+                <a href="#" className="text-sm hover:text-secondary-hover transition-colors">
                   Fonctionnalités
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-emerald-500 transition-colors">
+                <a href="#" className="text-sm hover:text-secondary-hover transition-colors">
                   Guide d'utilisation
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-emerald-500 transition-colors">
+                <a href="#" className="text-sm hover:text-secondary-hover transition-colors">
                   Support technique
                 </a>
               </li>
@@ -64,22 +64,22 @@ const Footer = () => {
             <h3 className="text-white font-semibold text-lg mb-4">Liens rapides</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-sm hover:text-emerald-500 transition-colors">
+                <a href="#" className="text-sm hover:text-secondary-hover transition-colors">
                   Accueil
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-emerald-500 transition-colors">
+                <a href="#" className="text-sm hover:text-secondary-hover transition-colors">
                   Conditions d'utilisation
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-emerald-500 transition-colors">
+                <a href="#" className="text-sm hover:text-secondary-hover transition-colors">
                   Politique de confidentialité
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-emerald-500 transition-colors">
+                <a href="#" className="text-sm hover:text-secondary-hover transition-colors">
                   FAQ
                 </a>
               </li>
@@ -91,15 +91,15 @@ const Footer = () => {
             <h3 className="text-white font-semibold text-lg mb-4">Besoin d'aide?</h3>
             <ul className="space-y-4">
               <li className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                <MapPin className="w-5 h-5 text-secondary-hover flex-shrink-0 mt-0.5" />
                 <span className="text-sm">Yaoundé, Cameroun</span>
               </li>
               <li className="flex items-start space-x-3">
-                <Phone className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                <Phone className="w-5 h-5 text-secondary-hover flex-shrink-0 mt-0.5" />
                 <span className="text-sm">+237 6XX XX XX XX</span>
               </li>
               <li className="flex items-start space-x-3">
-                <Mail className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                <Mail className="w-5 h-5 text-secondary-hover flex-shrink-0 mt-0.5" />
                 <span className="text-sm">contact@sgee.cm</span>
               </li>
             </ul>
