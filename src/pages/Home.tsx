@@ -1,40 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import EntranceExamCard from "@/components/EntranceExamCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import studentHero from "@/assets/images/student-hero.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { getConcours } from "@/features/concours/concoursSlice";
+import type { RootState, AppDispatch } from "@/store/store";
 
-
-const concours = [
-  {
-    title: "Concours ENI",
-    description: "Concours d'entrée à l'École Nationale d'Ingénierie.",
-    date: "Ouvert jusqu'au 15 août 2026",
-  },
-  {
-    title: "Concours ENS",
-    description: "Accédez aux métiers de l'enseignement supérieur.",
-    date: "Ouvert jusqu'au 30 juillet 2026",
-  },
-  {
-    title: "Concours Santé",
-    description: "Formations en soins infirmiers et santé publique.",
-    date: "Ouvert jusqu'au 10 septembre 2026",
-  },
-  {
-    title: "Concours Douanes",
-    description: "Recrutement des agents des douanes.",
-    date: "Ouvert jusqu'au 20 août 2026",
-  },
-];
 
 const Home = () => {
   const [index, setIndex] = useState(0);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const getSlidesPerView = () => {
+    if (window.innerWidth >= 1024) return 3; // lg
+    if (window.innerWidth >= 640) return 2;  // sm
+    return 1;                                // mobile
+  };
+
+  const { data: concours, loading } = useSelector(
+    (state: RootState) => state.concours
+  );
+
+  useEffect(() => {
+    dispatch(getConcours());
+  }, [dispatch]);
+
+  const slidesPerView = getSlidesPerView();
+  const maxIndex = Math.max(concours.length - slidesPerView, 0);
 
   const next = () => {
-    setIndex((prev) =>
-      prev < concours.length - 1 ? prev + 1 : prev
-    );
+    setIndex((prev) => (prev < maxIndex ? prev + 1 : prev));
   };
 
   const prev = () => {
@@ -102,19 +99,20 @@ const Home = () => {
                 }%)`,
               }}
             >
-              {concours.map((item, i) => (
-                <div
-                  key={i}
-                  className="
-                    w-full 
-                    sm:w-1/2 
-                    lg:w-1/3 
-                    flex-shrink-0 
-                    px-3
-                  "
-                >
-                  <EntranceExamCard {...item} />
-                </div>
+              {concours.length > 0 &&
+                concours.map((item: any, i: number) => (
+                  <div
+                    key={item.id ?? i}
+                    className="
+                      w-full 
+                      sm:w-1/2 
+                      lg:w-1/3 
+                      flex-shrink-0 
+                      px-3
+                    "
+                  >
+                    <EntranceExamCard {...item} />
+                  </div>
               ))}
             </div>
           </div>
@@ -133,7 +131,7 @@ const Home = () => {
             <button
               title="next entrance"
               onClick={next}
-              disabled={index >= concours.length - 1}
+              disabled={index >= maxIndex}
               className="cursor-pointer h-10 w-10 rounded-full border flex items-center justify-center
                         disabled:opacity-40 hover:bg-muted transition"
             >

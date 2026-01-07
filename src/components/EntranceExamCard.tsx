@@ -1,18 +1,30 @@
 import { ArrowRight, Calendar, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 const EntranceExamCard = ({
-    title,
+    id,
+    libelle_concours: title,
     description,
-    date,
+    date_examen: date,
     }: {
-    title: string;
+    id: number;
+    libelle_concours: string;
     description: string;
-    date: string
+    date_examen: Date
 }) => {
+    const navigate = useNavigate();
+
+    const formatDate = (dt: Date) => {
+        const date = new Date(dt);
+        const day = date.getDate();
+        const month = date.toLocaleString("fr-FR", { month: "long" });
+        const year = date.getFullYear();
+        return `${day} ${month} ${year}`;
+    };
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card onClick={() => navigate(`/concours/${id}`)} className="cursor-pointer hover:shadow-lg transition-shadow">
         <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
                 <Award className="h-5 w-5 text-primary" />
@@ -23,7 +35,7 @@ const EntranceExamCard = ({
             <p className="text-sm text-muted-foreground">{description}</p>
             <div className="flex items-center text-sm text-muted-foreground gap-2">
                 <Calendar className="h-4 w-4" />
-                <span>{date}</span>
+                <span>Date du concours: {formatDate(date)}</span>
             </div>
             <Button className="cursor-pointer bg-primary hover:bg-primary-hover w-full">
                 Voir les détails
