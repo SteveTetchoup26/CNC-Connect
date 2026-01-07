@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 
 const Header = () => {
@@ -22,15 +23,15 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#accueil" className="text-gray-700 hover:text-primary font-medium transition-colors">
+            <Link to="/" className="text-gray-700 hover:text-primary font-medium transition-colors">
               Accueil
-            </a>
-            <a href="#apropos" className="text-gray-700 hover:text-primary font-medium transition-colors">
+            </Link>
+            <Link to="#apropos" className="text-gray-700 hover:text-primary font-medium transition-colors">
               À propos
-            </a>
-            <a href="#contact" className="text-gray-700 hover:text-primary font-medium transition-colors">
+            </Link>
+            <Link to="#contact" className="text-gray-700 hover:text-primary font-medium transition-colors">
               Contact
-            </a>
+            </Link>
           </nav>
 
           {/* Desktop CTA Button */}
@@ -53,27 +54,27 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-100">
             <nav className="flex flex-col space-y-4">
-              <a
-                href="#accueil"
+              <Link
+                to="/"
                 className="text-gray-700 hover:text-indigo-600 font-medium transition-colors py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Accueil
-              </a>
-              <a
-                href="#apropos"
+              </Link>
+              <Link
+                to="#apropos"
                 className="text-gray-700 hover:text-indigo-600 font-medium transition-colors py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 À propos
-              </a>
-              <a
-                href="#contact"
+              </Link>
+              <Link
+                to="#contact"
                 className="text-gray-700 hover:text-indigo-600 font-medium transition-colors py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
-              </a>
+              </Link>
               <button className="bg-secondary hover:bg-emerald-600 text-white px-6 py-2.5 rounded-full font-medium transition-colors text-left">
                 Connexion
               </button>
