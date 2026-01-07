@@ -52,61 +52,86 @@ const EntranceExamDetails = () => {
   return (
     <main className="container mx-auto px-4 py-8 max-w-5xl">
       {/* Header avec logo */}
-      <section className="mb-8">
-        <Badge className="bg-primary/10 text-primary border border-primary/20 mb-4">
-          Concours officiel
-        </Badge>
-        
-        <div className="flex items-start justify-between gap-6 flex-wrap">
-          <div className="flex-1 min-w-0">
-            <h1 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900">
-              {selected.libelle_concours}
-            </h1>
-            <p className="text-[12px] md:text-lg text-gray-600 leading-relaxed">
-              {ecole?.libelle_ecole && `${ecole.libelle_ecole} — `}
-              {session?.libelle_session}
-              {/* {selected.date_examen && ` • Examen prévu le ${formatDate(selected.date_examen)}`} */}
-            </p>
+      <div className="relative p-2 md:p-10 mb-2 h-100 flex justify-between items-center rounded-2xl!">
+        {/* Section de la bannière */}
+        {ecole?.banniere_url && (
+          <div className="absolute inset-0 z-0">
+            <img 
+              src={ecole.banniere_url.startsWith('http') 
+                ? ecole.banniere_url 
+                : `${import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:8000'}/storage/${ecole.banniere_url}`}
+              alt={`Bannière ${ecole.libelle_ecole}`}
+              className="w-full h-full object-cover rounded-2xl!"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+            {/* Overlay sombre pour améliorer la lisibilité */}
+            <div className="absolute inset-0 bg-black/35 z-10 rounded-2xl!"></div>
           </div>
-          
-          {ecole?.logo_url && (
-            <div className="flex-shrink-0">
-              <img 
-                src={ecole.logo_url.startsWith('http') 
-                  ? ecole.logo_url 
-                  : `${import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:8000'}/storage/${ecole.logo_url}`}
-                alt={`Logo ${ecole.libelle_ecole}`}
-                className="w-20 h-20 md:w-28 md:h-28 object-contain"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
+        )}
+
+        {/* Contenu principal */}
+        <div className="relative z-20 text-white w-full">
+          <section className="w-full">
+            <Badge className="bg-white/70 text-secondary border border-primary/20 mb-4">
+              Concours officiel
+            </Badge>
+            
+            <div className="flex items-start justify-between gap-6 flex-wrap w-full!">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-3xl md:text-4xl font-bold mb-3">
+                  {selected.libelle_concours}
+                </h1>
+                <p className="text-[12px] md:text-lg font-bold leading-relaxed">
+                  {ecole?.libelle_ecole && `${ecole.libelle_ecole} — `}
+                  {session?.libelle_session}
+                </p>
+              </div>
+              
+              {ecole?.logo_url && (
+                <div className="flex-shrink-0">
+                  <img 
+                    src={ecole.logo_url.startsWith('http') 
+                      ? ecole.logo_url 
+                      : `${import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:8000'}/storage/${ecole.logo_url}`}
+                    alt={`Logo ${ecole.libelle_ecole}`}
+                    className="w-20 h-20 md:w-28 md:h-28 object-contain"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
             </div>
-          )}
+            
+          </section>
         </div>
+      </div>
+      <section className="mb-8">
         <div className="mt-4">
-          <p className="text-sm text-gray-700 leading-relaxed">
-            {ecole?.libelle_ecole && <><strong>{ecole.libelle_ecole}</strong> </>}
-            lance un concours d'entrée pour la {session?.libelle_session || 'session en cours'}
-            {selected.concours_filieres && selected.concours_filieres.length > 0 && (
-              <>
-                {' '}dans {selected.concours_filieres.length > 1 ? 'les filières' : 'la filière'} {selected.concours_filieres.map((cf: any, idx: number) => {
-                  const niveaux = cf.filiere?.niveaux || [];
-                  const niveauxStr = niveaux.length > 0 
-                    ? ` (${niveaux.map((n: any) => n.libelle_niveau || n.niveau).join(', ')})` 
-                    : '';
-                  return (
-                    <span key={cf.id}>
-                      <strong>{cf.filiere.libelle_filiere}</strong>{niveauxStr}
-                      {idx === selected.concours_filieres.length - 2 ? ' et ' : idx < selected.concours_filieres.length - 1 ? ', ' : ''}
-                    </span>
-                  );
-                })}.
-              </>
-            )}
-            {!selected.concours_filieres?.length && '.'}
-          </p>
-        </div>
+              <p className="text-sm  leading-relaxed">
+                   {ecole?.libelle_ecole && <><strong>{ecole.libelle_ecole}</strong> </>}
+                lance un concours d'entrée pour la {session?.libelle_session || 'session en cours'}
+                {selected.concours_filieres && selected.concours_filieres.length > 0 && (
+                  <>
+                    {' '}dans {selected.concours_filieres.length > 1 ? 'les filières' : 'la filière'} {selected.concours_filieres.map((cf: any, idx: number) => {
+                      const niveaux = cf.filiere?.niveaux || [];
+                      const niveauxStr = niveaux.length > 0 
+                        ? ` (${niveaux.map((n: any) => n.libelle_niveau || n.niveau).join(', ')})` 
+                        : '';
+                      return (
+                        <span key={cf.id}>
+                          <strong>{cf.filiere.libelle_filiere}</strong>{niveauxStr}
+                          {idx === selected.concours_filieres.length - 2 ? ' et ' : idx < selected.concours_filieres.length - 1 ? ', ' : ''}
+                        </span>
+                      );
+                    })}.
+                  </>
+                )}
+                {!selected.concours_filieres?.length && '.'}
+              </p>
+            </div>
       </section>
 
       {/* Infos clés */}
