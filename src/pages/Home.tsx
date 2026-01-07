@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import studentHero from "@/assets/images/student-hero.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { getConcours } from "@/features/concours/concoursSlice";
+import { getConcours } from "@/store/concours/concoursSlice";
 import type { RootState, AppDispatch } from "@/store/store";
 import { useNavigate } from "react-router-dom";
 

@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 
 
-const MainLayout = ({ children } : {children: any }) => {
+const MainLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchConcours, fetchConcoursById  } from "./concoursService";
+import { fetchConcours, fetchConcoursById  } from "../../services/concoursService";
+import type { ConcoursState } from "@/types";
 
 export const getConcours = createAsyncThunk(
   "concours/getAll",
@@ -29,12 +30,7 @@ export const getConcoursById = createAsyncThunk(
   }
 );
 
-interface ConcoursState {
-  data: any[];
-  selected: any | null;
-  loading: boolean;
-  error: string | null;
-}
+
 
 const initialState: ConcoursState = {
   data: [],

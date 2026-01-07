@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getConcoursById } from "@/features/concours/concoursSlice";
+import { getConcoursById } from "@/store/concours/concoursSlice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
