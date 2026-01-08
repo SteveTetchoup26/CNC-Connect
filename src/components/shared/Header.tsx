@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -36,7 +37,7 @@ const Header = () => {
 
           {/* Desktop CTA Button */}
           <div className="hidden md:block">
-            <button className="bg-secondary hover:bg-secondary-hover cursor-pointer text-white px-6 py-2.5 rounded-full font-medium transition-colors">
+            <button onClick={() => navigate(`/auth/login`)} className="bg-secondary hover:bg-secondary-hover cursor-pointer text-white px-6 py-2.5 rounded-full font-medium transition-colors">
               Connexion
             </button>
           </div>

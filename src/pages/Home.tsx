@@ -7,11 +7,13 @@ import studentHero from "@/assets/images/student-hero.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { getConcours } from "@/features/concours/concoursSlice";
 import type { RootState, AppDispatch } from "@/store/store";
+import { useNavigate } from "react-router-dom";
 
 
 const Home = () => {
   const [index, setIndex] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const getSlidesPerView = () => {
     if (window.innerWidth >= 1024) return 3; // lg
@@ -148,7 +150,7 @@ const Home = () => {
         <p className="text-muted-foreground max-w-xl mx-auto">
           Créez un compte et commencez votre enrôlement en quelques minutes.
         </p>
-        <Button size="lg" className="cursor-pointer bg-secondary hover:bg-secondary-hover">
+        <Button onClick={() => navigate(`/auth/register`)} size="lg" className="cursor-pointer bg-secondary hover:bg-secondary-hover">
           Créer un compte
         </Button>
       </section>

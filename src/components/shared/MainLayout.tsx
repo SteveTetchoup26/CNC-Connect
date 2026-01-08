@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
 
 
-const Layout = ({ children } : {children: any }) => {
+const MainLayout = ({ children } : {children: any }) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow px-2 md:px-28">
-        { children }
+        <Outlet />
       </main>
       <Footer />
     </div>
   );
 };
 
-export default Layout;
+export default MainLayout;
