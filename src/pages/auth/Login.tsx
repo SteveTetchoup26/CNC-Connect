@@ -3,9 +3,43 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { clearAuthState, loginThunk } from "@/store/auth/authSlice";
+import type { RootState } from "@/store/store";
+import { useEffect, useState } from "react";
 
 const Login = () => {
     const navigate = useNavigate();
+     const dispatch = useAppDispatch();
+
+    const { loading, error, isAuthenticated, user } = useAppSelector(
+        (state: RootState) => state.auth
+    );
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        dispatch(
+            loginThunk({
+            email,
+            password,
+        })
+        );
+    };
+
+    useEffect(() => {
+    if (isAuthenticated && user) {
+        // Exemple de redirection par rôle
+        if (user.roles?.includes("admin")) {
+            navigate("/admin/dashboard");
+        } else {
+            navigate("/");
+        }
+    }
+    }, [isAuthenticated, user, navigate]);
 
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-2">
@@ -29,19 +63,36 @@ const Login = () => {
               </p>
             </div>
 
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                    <p className="text-sm text-red-500 text-center">
+                        {error}
+                    </p>
+                )}
               <div className="space-y-1">
                 <Label className="mb-2" htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="exemple@email.com" />
+                <Input 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}    
+                    id="email" 
+                    type="email" 
+                    placeholder="exemple@email.com" />
               </div>
 
               <div className="space-y-1">
                 <Label className="mb-2" htmlFor="password">Mot de passe</Label>
-                <Input type="password" />
+                <Input 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password" />
               </div>
 
-              <Button className="w-full bg-primary hover:bg-primary-hover cursor-pointer">
-                Se connecter
+              <Button 
+                type="submit"
+                disabled={loading}
+                className="w-full bg-primary hover:bg-primary-hover cursor-pointer"
+                >
+                {loading ? "Connexion..." : "Se connecter"}
               </Button>
             </form>
 

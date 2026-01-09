@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getConcoursById } from "@/features/concours/concoursSlice";
+import { getConcoursById } from "@/store/concours/concoursSlice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,6 +11,7 @@ import type { RootState, AppDispatch } from "@/store/store";
 
 const EntranceExamDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { selected, loading, error } = useSelector(
     (state: RootState) => state.concours
@@ -308,7 +309,7 @@ const EntranceExamDetails = () => {
 
       {/* CTA */}
       <section className="text-center pt-6 pb-4">
-        <Button size="lg" className="px-8 py-6 text-lg font-semibold">
+        <Button onClick={() => navigate(`/concours/${id}/enrolment`)} size="lg" className="px-8 py-6 text-lg font-semibold">
           S'inscrire à ce concours
         </Button>
       </section>
