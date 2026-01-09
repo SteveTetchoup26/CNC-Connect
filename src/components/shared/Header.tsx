@@ -165,7 +165,7 @@ const Header = () => {
                           navigate("/profile");
                           setIsUserMenuOpen(false);
                         }}
-                        className="menu-item"
+                        className="menu-item rounded-lg"
                       >
                         <User className="w-4 h-4" /> Profil
                       </button>
@@ -180,7 +180,7 @@ const Header = () => {
                       </button>
                       <button
                         onClick={handleLogout}
-                        className="menu-item text-red-600"
+                        className="menu-item text-red-600 rounded-lg"
                       >
                         <LogOut className="w-4 h-4" /> Déconnexion
                       </button>

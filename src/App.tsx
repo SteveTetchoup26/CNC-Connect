@@ -1,39 +1,47 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AuthLayout from "./components/shared/AuthLayout"; // Créez ce composant
-import Home from './pages/Home';
-import './index.css';
-import EntranceExamDetails from './pages/EntranceExamDetails';
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import MainLayout from './components/shared/MainLayout';
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { useEffect } from 'react';
-import { getMeThunk } from './store/auth/authSlice';
-import AuthProvider from './components/providers/AuthProvider';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import EntranceExamDetails from "./pages/concours/EntranceExamDetails";
+
+import MainLayout from "./components/shared/MainLayout";
+import AuthLayout from "./components/shared/AuthLayout";
+import AuthProvider from "./components/providers/AuthProvider";
+
+import ProtectedRoute from "./components/routes/ProtectedRoute";
+import GuestRoute from "./components/routes/GuestRoute";
+
+import "./index.css";
+import InscriptionConcours from "./pages/concours/InscriptionConcours";
 
 function App() {
-  const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.auth.token);
-
-  useEffect(() => {
-    if (token) {
-      dispatch(getMeThunk());
-    }
-  }, [token, dispatch]);
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          {/* Routes avec layout principal */}
+          {/* Routes publiques */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/concours/:id" element={<EntranceExamDetails />} />
           </Route>
 
-          {/* Routes avec layout d'authentification */}
-          <Route element={<AuthLayout />}>
-            <Route path="/auth/login" element={<Login />} />
-            <Route path="/auth/register" element={<Register />} />
+          {/* Routes privées */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<MainLayout />}>
+              <Route path="/dashboard" element={<div>Dashboard</div>} />
+              <Route path="/profile" element={<div>Profile</div>} />
+              <Route path="/mes-inscriptions" element={<div>Mes inscriptions</div>} />
+              <Route path="/concours/:id/enrolment" element={<InscriptionConcours />} />
+
+            </Route>
+          </Route>
+
+          {/* Routes invité */}
+          <Route element={<GuestRoute />}>
+            <Route element={<AuthLayout />}>
+              <Route path="/auth/login" element={<Login />} />
+              <Route path="/auth/register" element={<Register />} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>

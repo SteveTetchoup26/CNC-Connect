@@ -76,7 +76,7 @@ const Register = () => {
               )}
               <div className="space-y-1">
                 <Label className="mb-2" htmlFor="nom">
-                  Nom <span className="text-secondary">*</span>{" "}
+                  Nom(s) <span className="text-secondary">*</span>{" "}
                 </Label>
                 <Input
                   id="nom"
@@ -88,7 +88,7 @@ const Register = () => {
               </div>
               <div className="space-y-1">
                 <Label className="mb-2" htmlFor="prenom">
-                  Prénom
+                  Prénom(s)<span className="text-secondary">*</span>
                 </Label>
                 <Input
                   id="prenom"
