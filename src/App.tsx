@@ -14,10 +14,13 @@ import GuestRoute from "./components/routes/GuestRoute";
 import "./index.css";
 import InscriptionConcours from "./pages/concours/InscriptionConcours";
 
+import { Toaster } from 'sonner';
+
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <Toaster position="top-right" richColors />
         <Routes>
           {/* Routes publiques */}
           <Route element={<MainLayout />}>
