@@ -1,0 +1,169 @@
+{
+  "regions": [
+    {
+      "id": 1,
+      "nom": "Adamaoua",
+      "departements": [
+        {
+          "id": 101,
+          "nom": "Vina",
+          "villes": ["Ngaoundéré", "Belel", "Mbe"]
+        },
+        {
+          "id": 102,
+          "nom": "Mbéré",
+          "villes": ["Meiganga", "Dir"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nom": "Centre",
+      "departements": [
+        {
+          "id": 201,
+          "nom": "Mfoundi",
+          "villes": ["Yaoundé"]
+        },
+        {
+          "id": 202,
+          "nom": "Lekié",
+          "villes": ["Monatélé", "Obala"]
+        },
+        {
+          "id": 203,
+          "nom": "Mbam-et-Inoubou",
+          "villes": ["Bafia", "Ombessa"]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "nom": "Est",
+      "departements": [
+        {
+          "id": 301,
+          "nom": "Haut-Nyong",
+          "villes": ["Abong-Mbang", "Doumé"]
+        },
+        {
+          "id": 302,
+          "nom": "Lom-et-Djérem",
+          "villes": ["Bertoua", "Garoua-Boulaï"]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "nom": "Extrême-Nord",
+      "departements": [
+        {
+          "id": 401,
+          "nom": "Diamaré",
+          "villes": ["Maroua", "Bogo"]
+        },
+        {
+          "id": 402,
+          "nom": "Mayo-Tsanaga",
+          "villes": ["Mokolo", "Koza"]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "nom": "Littoral",
+      "departements": [
+        {
+          "id": 501,
+          "nom": "Wouri",
+          "villes": ["Douala"]
+        },
+        {
+          "id": 502,
+          "nom": "Sanaga-Maritime",
+          "villes": ["Édéa", "Dizangué"]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "nom": "Nord",
+      "departements": [
+        {
+          "id": 601,
+          "nom": "Bénoué",
+          "villes": ["Garoua", "Lagdo"]
+        },
+        {
+          "id": 602,
+          "nom": "Mayo-Rey",
+          "villes": ["Tcholliré", "Rey-Bouba"]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "nom": "Nord-Ouest",
+      "departements": [
+        {
+          "id": 701,
+          "nom": "Mezam",
+          "villes": ["Bamenda"]
+        },
+        {
+          "id": 702,
+          "nom": "Boyo",
+          "villes": ["Fundong"]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "nom": "Ouest",
+      "departements": [
+        {
+          "id": 801,
+          "nom": "Mifi",
+          "villes": ["Bafoussam"]
+        },
+        {
+          "id": 802,
+          "nom": "Menoua",
+          "villes": ["Dschang"]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "nom": "Sud",
+      "departements": [
+        {
+          "id": 901,
+          "nom": "Mvila",
+          "villes": ["Ebolowa"]
+        },
+        {
+          "id": 902,
+          "nom": "Océan",
+          "villes": ["Kribi", "Campo"]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "nom": "Sud-Ouest",
+      "departements": [
+        {
+          "id": 1001,
+          "nom": "Fako",
+          "villes": ["Buea", "Limbe"]
+        },
+        {
+          "id": 1002,
+          "nom": "Meme",
+          "villes": ["Kumba"]
+        }
+      ]
+    }
+  ]
+}
