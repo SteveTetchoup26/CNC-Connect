@@ -1,125 +1,174 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
-
+import { CheckCircle } from "lucide-react";
 import PersonalInfo from "./steps/PersonalInfo";
 import IdentityInfo from "./steps/IdentityInfo";
 import FamilyInfo from "./steps/FamilyInfo";
 import SchoolInfo from "./steps/SchoolInfo";
 import PaymentInfo from "./steps/PaymentInfo";
 import CentersInfo from "./steps/CentersInfo";
-
-const steps = [
-  "Informations perso",
-  "Pièce d'identité",
-  "Informations familiales",
-  "Informations scolaires",
-  "Paiement",
-  "Centres & Validation",
-];
+import PreviewStep from "./steps/previewStep";
+import { FormProvider, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 const Stepper = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [showPreview, setShowPreview] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { id } = useParams(); // Dans le composant Stepper
+  
+
+  const steps = [
+    "Informations perso",
+    "Pièce d'identité",
+    "Informations familiales",
+    "Informations scolaires",
+    "Paiement",
+    "Centres & Validation",
+  ];
 
   const methods = useForm({
     mode: "onBlur",
-    // defaultValues: {
-    //   firstName: "",
-    //   lastName: "",
-    //   phone: "",
-    //   // ➜ complète ici au fur et à mesure
-    // },
   });
 
-  const next = async () => {
-    setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
+  const next = () => {
+    setCurrentStep((s: any) => Math.min(s + 1, steps.length - 1));
   };
 
   const prev = () => {
-    setCurrentStep((s) => Math.max(s - 1, 0));
+    if (showPreview) {
+      setShowPreview(false);
+    } else {
+      setCurrentStep((s: any) => Math.max(s - 1, 0));
+    }
   };
 
-  const onSubmit = (data: any) => {
-    console.log("INSCRIPTION COMPLETE :", data);
-    // dispatch redux / api ici
+  const handlePreSubmit = () => {
+    setShowPreview(true);
+  };
+
+  const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
+
+    // Simulation d'envoi
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    console.log("INSCRIPTION COMPLETE :", {
+      ...data,
+      concours_id: id
+    });
+    setIsSubmitting(false);
+
+    // Afficher un message de succès
+    alert("Inscription soumise avec succès !");
   };
 
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(onSubmit)}
-        className="w-full mx-auto p-4 md:p-4"
-      >
+      <div className="w-full mx-auto p-4 md:p-4">
         {/* Stepper */}
-        <div className="mb-10">
-          <div className="flex gap-4 justify-between">
-            {steps.map((label, index) => (
-              <div
-                key={label}
-                className={`
-                flex-1 min-w-32.5
-                ${index === currentStep ? "block" : "hidden"}
-                lg:block
-                `}>
+        {!showPreview && (
+          <div className="mb-10">
+            <div className="flex gap-4 justify-between">
+              {steps.map((label, index) => (
                 <div
-                  className={`rounded-full px-3 py-2 text-center text-sm font-medium transition-all
-          ${
-            index === currentStep
-              ? "bg-secondary text-white"
-              : "bg-gray-100 text-gray-600"
-          }`}
+                  key={label}
+                  className={`
+                    flex-1 min-w-32.5
+                    ${index === currentStep ? "block" : "hidden"}
+                    lg:block
+                  `}
                 >
-                  {label}
+                  <div
+                    className={`rounded-full px-3 py-2 text-center text-sm font-medium transition-all
+                      ${
+                        index === currentStep
+                          ? "bg-secondary text-white"
+                          : "bg-gray-100 text-gray-600"
+                      }`}
+                  >
+                    {label}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* Indicateur mobile */}
-          <div className="mt-2 text-center text-sm text-gray-500 lg:hidden">
-            Étape {currentStep + 1} / {steps.length}
+            <div className="mt-2 text-center text-sm text-gray-500 lg:hidden">
+              Étape {currentStep + 1} / {steps.length}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Form content */}
         <div className="bg-white rounded-2xl shadow p-6 md:p-10">
-          {currentStep === 0 && <PersonalInfo />}
-          {currentStep === 1 && <IdentityInfo />}
-          {currentStep === 2 && <FamilyInfo />}
-          {currentStep === 3 && <SchoolInfo />}
-          {currentStep === 4 && <PaymentInfo />}
-          {currentStep === 5 && <CentersInfo />}
+          {showPreview ? (
+            <>
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">
+                Prévisualisation de votre inscription
+              </h2>
+              <PreviewStep data={methods.watch()} />
+            </>
+          ) : (
+            <>
+              {currentStep === 0 && <PersonalInfo />}
+              {currentStep === 1 && <IdentityInfo />}
+              {currentStep === 2 && <FamilyInfo />}
+              {currentStep === 3 && <SchoolInfo />}
+              {currentStep === 4 && <PaymentInfo />}
+              {currentStep === 5 && <CentersInfo />}
+            </>
+          )}
 
           {/* Navigation */}
           <div className="flex justify-between mt-8">
             <button
               type="button"
               onClick={prev}
-              disabled={currentStep === 0}
-              className="px-6 py-2 rounded-lg border disabled:opacity-50 cursor-pointer"
+              disabled={currentStep === 0 && !showPreview}
+              className="px-6 py-2 rounded-lg border disabled:opacity-50 hover:bg-gray-50 transition-colors cursor-pointer"
             >
-              Précédent
+              {showPreview ? "Modifier" : "Précédent"}
             </button>
 
-            {currentStep < steps.length - 1 ? (
+            {showPreview ? (
+              <button
+                type="button"
+                onClick={() => methods.handleSubmit(onSubmit)()}
+                disabled={isSubmitting}
+                className="px-6 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Soumission...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="w-4 h-4" />
+                    Confirmer l'inscription
+                  </>
+                )}
+              </button>
+            ) : currentStep < steps.length - 1 ? (
               <button
                 type="button"
                 onClick={next}
-                className="px-6 py-2 rounded-lg bg-secondary text-white cursor-pointer"
+                className="px-6 py-2 rounded-lg bg-secondary text-white hover:opacity-90 transition-opacity cursor-pointer"
               >
                 Suivant
               </button>
             ) : (
               <button
-                type="submit"
-                className="px-6 py-2 rounded-lg bg-green-600 text-white cursor-pointer"
+                type="button"
+                onClick={handlePreSubmit}
+                className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors cursor-pointer"
               >
-                Soumettre
+                Prévisualiser
               </button>
             )}
           </div>
         </div>
-      </form>
+      </div>
     </FormProvider>
   );
 };
