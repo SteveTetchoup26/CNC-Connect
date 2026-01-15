@@ -10,6 +10,9 @@ import PreviewStep from "./steps/previewStep";
 import { FormProvider, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
+import { toast } from "sonner";
+import { inscriptionService } from "@/services/inscriptionService";
+import type { InscriptionData } from "@/types";
 
 const Stepper = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -50,17 +53,42 @@ const Stepper = () => {
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
 
-    // Simulation d'envoi
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Ajouter l'ID du concours aux données
+      const dataWithConcours: InscriptionData = {
+        ...data,
+        concours_id: id,
+      };
 
-    console.log("INSCRIPTION COMPLETE :", {
-      ...data,
-      concours_id: id
-    });
-    setIsSubmitting(false);
+      // Appel API
+      const response = await inscriptionService.inscrireConcours(dataWithConcours);
 
-    // Afficher un message de succès
-    alert("Inscription soumise avec succès !");
+      // Afficher le toast de succès
+      toast.success(response.message, {
+        duration: 5000,
+      });
+
+      console.log("Inscription réussie:", response);
+
+      // Rediriger vers une page de succès ou de confirmation
+      // navigate(`/concours/${id}/confirmation`, { state: { candidature: response.candidature } });
+
+      // Ou télécharger le fichier si nécessaire
+      if (response.download_url) {
+        window.open(response.download_url, '_blank');
+      }
+
+    } catch (error: any) {
+      // Afficher le toast d'erreur
+      toast.error("Erreur d'inscription", {
+        description: error.message || "Une erreur est survenue lors de l'inscription",
+        duration: 5000,
+      });
+
+      console.error("Erreur lors de l'inscription:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

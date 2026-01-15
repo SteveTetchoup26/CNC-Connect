@@ -2,6 +2,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as authService from "@/services/authService";
 import type { AuthState, LoginPayload, RegisterPayload } from "@/types";
+import { toast } from "sonner";
+
+const extractError = (error: any): string => {
+  const data = error.response?.data;
+
+  if (!data) return "Une erreur est survenue";
+
+  // Erreurs par champ
+  if (data.errors) {
+    return Object.values(data.errors).flat().join("\n");
+  }
+
+  // Message global
+  if (data.message) {
+    return data.message;
+  }
+
+  return "Une erreur est survenue";
+};
 
 export const loginThunk = createAsyncThunk(
   "auth/login",
@@ -22,11 +41,21 @@ export const registerThunk = createAsyncThunk(
   async (payload: RegisterPayload, { rejectWithValue }) => {
     try {
       const res = await authService.register(payload);
+
+      toast.success(res.data.message || "Inscription réussie", {
+        duration: 5000,
+      });
+
       return res;
     } catch (err: any) {
-      return rejectWithValue(
-        err.response?.data?.message || "Erreur lors de l'inscription"
-      );
+      const errorMessage = extractError(err);
+
+      toast.error("Erreur lors de l'inscription", {
+        description: errorMessage,
+        duration: 6000,
+      });
+
+      return rejectWithValue(errorMessage);
     }
   }
 );
