@@ -9,9 +9,9 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="bg-primary p-2 rounded-lg">
-              <span className="text-xl md:text-2xl font-bold text-white">SG</span>
-            </div>
+              <div className="bg-primary p-2 rounded-lg w-12 h-12 flex items-center justify-center">
+                <span className="text-xl md:text-2xl font-bold text-white">SE</span>
+              </div>
             </div>
             <p className="text-sm leading-relaxed">
               Système de Gestion d'Enrôlement des Étudiants

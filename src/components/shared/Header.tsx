@@ -65,9 +65,9 @@ const Header = () => {
             </button>
 
             {/* Logo */}
-            <Link to="/" className="bg-primary p-2 rounded-lg hidden md:block">
+            <Link to="/" className="bg-primary p-2 rounded-lg hidden md:flex w-12 h-12 items-center justify-center">
               <span className="text-xl md:text-2xl font-bold text-white">
-                SG
+                SE
               </span>
             </Link>
           </div>

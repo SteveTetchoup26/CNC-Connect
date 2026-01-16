@@ -24,7 +24,7 @@ const EntranceExamCard = ({
         return `${day} ${month} ${year}`;
     };
   return (
-    <Card onClick={() => navigate(`/concours/${id}`)} className="cursor-pointer hover:shadow-lg transition-shadow">
+    <Card onClick={() => navigate(`/concours/${id}`)} className="cursor-pointer hover:shadow-lg transition-shadow h-60 flex flex-col justify-between">
         <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
                 <Award className="h-5 w-5 text-primary" />

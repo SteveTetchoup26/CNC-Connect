@@ -8,6 +8,7 @@ export const fetchConcours = async () => {
 
 export const fetchConcoursById = async (id: number | string) => {
   const response = await api.get(`/concours/${id}`);
+  console.log(response.data)
   return response.data;
 };
 

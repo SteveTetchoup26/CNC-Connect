@@ -297,13 +297,13 @@ const EntranceExamDetails = () => {
       <section className="pt-6 pb-4">
         <p>Pour plus d'informations, Veuillez contacter l'école :</p>
         {
-            ecole?.contact_ecole && <p className="text-gray-600 italic">• Contact: {ecole.telephone_ecole}</p>
+            ecole?.telephone_ecole && <p className="text-gray-600 italic">• Contact: {ecole.telephone_ecole}</p>
         }
         {
             ecole?.email_ecole && <p className="text-gray-600 italic">• Email: {ecole.email_ecole}</p>
         }
         {
-            ecole?.site_web && <a href={ecole.siteweb_ecole} className="text-gray-600 italic hover:underline">• Site web: {ecole.siteweb_ecole}</a>
+            ecole?.siteweb_ecole && <a href={ecole.siteweb_ecole} className="text-gray-600 italic hover:underline">• Site web: {ecole.siteweb_ecole}</a>
         }
       </section>
 
