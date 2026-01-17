@@ -1,67 +1,38 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getConcours } from "@/store/concours/concoursSlice";
-import EntranceExamCard from "@/components/EntranceExamCard";
+import { classifyConcours } from "@/utils/classifyConcours";
+import { RUBRIQUES } from "@/utils/concoursRubriques";
+import ConcoursSlider from "@/components/ConcoursSlider";
 
 const ConcoursList = () => {
   const dispatch = useAppDispatch();
-  const { data, meta, loading } = useAppSelector((s) => s.concours);
-
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
+  const { data: concours, loading } = useAppSelector((s) => s.concours);
 
   useEffect(() => {
-    dispatch(getConcours({ page, search, per_page: 6 }));
-  }, [page, search]);
+    dispatch(getConcours({ raw: true }));
+  }, [dispatch]);
+
+  if (loading) return <p className="text-center py-10">Chargement...</p>;
+
+  const sections = classifyConcours(concours);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
-        <h1 className="text-2xl font-bold">Concours disponibles</h1>
+    <div className="max-w-7xl mx-auto px-4 py-10 space-y-16">
+      {/* <h1 className="text-2xl font-bold">Concours disponibles</h1> */}
 
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Rechercher un concours..."
-          className="border rounded-lg px-4 py-2 w-full md:w-72 outline-secondary"
+      {RUBRIQUES.map((r) => (
+        <ConcoursSlider
+          key={r.key}
+          title={r.title}
+          items={sections[r.key] || []}
         />
-      </div>
+      ))}
 
-      {/* Loading */}
-      {loading && <p className="text-center">Chargement...</p>}
-
-      {/* Grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data?.data?.map((c) => (
-          <EntranceExamCard key={c.id} {...c} />
-        ))}
-      </div>
-
-      {/* Pagination */}
-      {meta && (
-        <div className="flex justify-center gap-3 mt-10">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage((p) => p - 1)}
-            className="px-4 py-2 border rounded disabled:opacity-50"
-          >
-            Précédent
-          </button>
-
-          <span className="px-4 py-2">
-            Page {meta.current_page} / {meta.last_page}
-          </span>
-
-          <button
-            disabled={page === meta.last_page}
-            onClick={() => setPage((p) => p + 1)}
-            className="px-4 py-2 border rounded disabled:opacity-50"
-          >
-            Suivant
-          </button>
-        </div>
-      )}
+      <ConcoursSlider
+        title="Autres concours"
+        items={sections.others || []}
+      />
     </div>
   );
 };
