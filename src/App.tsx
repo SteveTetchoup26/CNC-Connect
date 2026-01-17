@@ -15,6 +15,7 @@ import "./index.css";
 import InscriptionConcours from "./pages/concours/InscriptionConcours";
 
 import { Toaster } from 'sonner';
+import ConcoursList from "./pages/concours/ConcoursList";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
               <Route path="/dashboard" element={<div>Dashboard</div>} />
               <Route path="/profile" element={<div>Profile</div>} />
               <Route path="/mes-inscriptions" element={<div>Mes inscriptions</div>} />
+              <Route path="/concours" element={<ConcoursList />} />
               <Route path="/concours/:id/enrolment" element={<InscriptionConcours />} />
 
             </Route>
