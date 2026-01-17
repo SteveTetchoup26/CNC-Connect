@@ -153,7 +153,7 @@ const Home = () => {
         <Button
           onClick={() => navigate(`/auth/register`)}
           size="lg"
-          className="cursor-pointer bg-secondary hover:bg-secondary-hover"
+          className="cursor-pointer bg-primary hover:bg-primary-hover"
         >
           Créer un compte
         </Button>
