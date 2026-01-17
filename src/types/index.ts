@@ -13,6 +13,7 @@ export interface ConcoursState {
   selected: any | null;
   loading: boolean;
   error: string | null;
+  meta: ConcoursMeta | null;
 }
 
 export interface LoginPayload {
@@ -71,4 +72,31 @@ export interface InscriptionResponse {
   code_temporaire: string;
   statut: string;
   download_url: string;
+}
+
+export interface Concours {
+  id: number;
+  libelle_concours: string;
+  description?: string;
+  date_examen?: Date;
+  sessions?: any[];
+  frais_concours?: {
+    montant_frais: number;
+  };
+}
+
+export interface ConcoursMeta {
+  current_page: number;
+  per_page: number;
+  total: number;
+  last_page: number;
+}
+
+export interface FetchConcoursParams {
+  page?: number;
+  per_page?: number;
+  search?: string;
+  annee?: number;
+  statut?: string;
+  raw?: boolean;
 }

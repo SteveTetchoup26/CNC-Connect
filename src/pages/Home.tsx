@@ -7,8 +7,7 @@ import studentHero from "@/assets/images/student-hero.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { getConcours } from "@/store/concours/concoursSlice";
 import type { RootState, AppDispatch } from "@/store/store";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [index, setIndex] = useState(0);
@@ -17,16 +16,16 @@ const Home = () => {
 
   const getSlidesPerView = () => {
     if (window.innerWidth >= 1024) return 3; // lg
-    if (window.innerWidth >= 640) return 2;  // sm
-    return 1;                                // mobile
+    if (window.innerWidth >= 640) return 2; // sm
+    return 1; // mobile
   };
 
   const { data: concours, loading } = useSelector(
-    (state: RootState) => state.concours
+    (state: RootState) => state.concours,
   );
 
   useEffect(() => {
-    dispatch(getConcours());
+    dispatch(getConcours({ raw: true }));
   }, [dispatch]);
 
   const slidesPerView = getSlidesPerView();
@@ -43,14 +42,14 @@ const Home = () => {
   return (
     <main>
       <section className="md:relative min-h-screen overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
           style={{ backgroundImage: `url(${studentHero})` }}
         />
-        
+
         {/* Overlay pour améliorer la lisibilité du texte */}
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent z-0" />
-        
+
         <div className="relative container mx-auto px-4 py-16 md:py-24 z-10 min-h-screen flex items-center">
           <div className="max-w-xl space-y-6">
             <span className="inline-block bg-secondary/10 text-secondary px-4 py-1 rounded-full text-sm">
@@ -68,7 +67,7 @@ const Home = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
-              <Button className="cursor-pointer bg-primary hover:bg-primary-hover px-5 py-3 text-base sm:text-lg w-full sm:w-auto">
+              <Button onClick={() => navigate("/concours")} className="cursor-pointer bg-primary hover:bg-primary-hover px-5 py-3 text-base sm:text-lg w-full sm:w-auto">
                 Voir les concours
               </Button>
               <Button
@@ -87,18 +86,19 @@ const Home = () => {
           <h2 className="text-xl md:text-3xl font-bold">
             Concours <span className="text-primary">disponibles</span>
           </h2>
-          <p className="text-muted-foreground mt-2 ">
-            Découvrez les concours ouverts et commencez votre enrôlement.
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-muted-foreground mt-2 ">
+              Découvrez les concours ouverts et commencez votre enrôlement.
+            </p>
+            <Link to="/concours" className="underline text-primary">Voir plus</Link>
+          </div>
         </div>
         <div className="relative">
           <div className="overflow-hidden">
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${
-                  index * 100
-                }%)`,
+                transform: `translateX(-${index * 100}%)`,
               }}
             >
               {concours.length > 0 &&
@@ -115,7 +115,7 @@ const Home = () => {
                   >
                     <EntranceExamCard {...item} />
                   </div>
-              ))}
+                ))}
             </div>
           </div>
 
@@ -150,7 +150,11 @@ const Home = () => {
         <p className="text-muted-foreground max-w-xl mx-auto">
           Créez un compte et commencez votre enrôlement en quelques minutes.
         </p>
-        <Button onClick={() => navigate(`/auth/register`)} size="lg" className="cursor-pointer bg-secondary hover:bg-secondary-hover">
+        <Button
+          onClick={() => navigate(`/auth/register`)}
+          size="lg"
+          className="cursor-pointer bg-secondary hover:bg-secondary-hover"
+        >
           Créer un compte
         </Button>
       </section>

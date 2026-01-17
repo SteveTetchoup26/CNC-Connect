@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import api from "@/api/axios";
+import type { FetchConcoursParams } from "@/types";
 
-export const fetchConcours = async () => {
-  const response = await api.get("/concours");
+export const fetchConcours = async (params: FetchConcoursParams) => {
+  const response = await api.get("/concours", { params });
   return response.data;
 };
 

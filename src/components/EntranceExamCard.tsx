@@ -37,7 +37,7 @@ const EntranceExamCard = ({
                 <Calendar className="h-4 w-4" />
                 <span>Date du concours: {formatDate(date)}</span>
             </div>
-            <Button className="cursor-pointer bg-primary hover:bg-primary-hover w-full">
+            <Button className="cursor-pointer bg-secondary hover:bg-secondary-hover w-full">
                 Voir les détails
                 <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
