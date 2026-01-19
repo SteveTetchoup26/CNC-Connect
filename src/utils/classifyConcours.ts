@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // classifyConcours.ts
 import { RUBRIQUES } from "./concoursRubriques";
 

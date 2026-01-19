@@ -94,8 +94,8 @@ const Header = () => {
                 <Link to="/concours" className="nav-link">
                   Concours
                 </Link>
-                <Link to="/mes-inscriptions" className="nav-link">
-                  Mes inscriptions
+                <Link to="/mes-candidatures" className="nav-link">
+                  Mes candidatures
                 </Link>
                 <Link to="/dashboard" className="nav-link">
                   Dashboard

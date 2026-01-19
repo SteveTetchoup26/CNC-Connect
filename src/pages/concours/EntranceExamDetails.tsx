@@ -309,7 +309,7 @@ const EntranceExamDetails = () => {
 
       {/* CTA */}
       <section className="text-center pt-6 pb-4">
-        <Button onClick={() => navigate(`/concours/${id}/enrolment`)} size="lg" className="px-8 py-6 text-lg font-semibold">
+        <Button onClick={() => navigate(`/concours/${id}/enrolment`)} size="lg" className="px-8 py-6 text-lg font-semibold cursor-pointer">
           S'inscrire à ce concours
         </Button>
       </section>

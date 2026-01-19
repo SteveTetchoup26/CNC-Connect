@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import Candidatures from "./pages/Candidatures";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import EntranceExamDetails from "./pages/concours/EntranceExamDetails";
@@ -16,6 +17,7 @@ import InscriptionConcours from "./pages/concours/InscriptionConcours";
 
 import { Toaster } from 'sonner';
 import ConcoursList from "./pages/concours/ConcoursList";
+import ConcoursByRubrique from "./pages/concours/ConcoursByRubrique";
 
 function App() {
   return (
@@ -37,6 +39,9 @@ function App() {
               <Route path="/mes-inscriptions" element={<div>Mes inscriptions</div>} />
               <Route path="/concours" element={<ConcoursList />} />
               <Route path="/concours/:id/enrolment" element={<InscriptionConcours />} />
+              <Route path="/concours/rubrique/:rubrique" element={<ConcoursByRubrique />} />
+
+              <Route path="/mes-candidatures" element={<Candidatures />} />
 
             </Route>
           </Route>
