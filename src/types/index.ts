@@ -99,4 +99,78 @@ export interface FetchConcoursParams {
   annee?: number;
   statut?: string;
   raw?: boolean;
+  rubrique?: string;
+}
+
+
+export interface Candidature {
+  id: number;
+  candidat_id: number;
+  concours_id: number;
+  centre_depot_id: number;
+  centre_examen_id: number;
+  // statut: 'EN_ATTENTE' | 'VALIDEE' | 'REJETEE' | 'ADMIS' | 'NON_ADMIS';
+  status: string;
+  date_candidature: string;
+  code_candidat: string;
+  fiche_url?: string;
+  candidat: {
+    id: number;
+    utilisateur: {
+      id: number;
+      name: string;
+      email: string;
+    };
+  };
+  concours: {
+    id: number;
+    libelle_concours: string;
+    date_examen: string;
+    date_limite: string;
+    concours_filieres: Array<{
+      id: number;
+      filiere: {
+        id: number;
+        libelle_filiere: string;
+        departement: {
+          id: number;
+          libelle_departement: string;
+          ecole: {
+            id: number;
+            libelle_ecole: string;
+            logo_url?: string;
+            banniere_url?: string;
+          };
+        };
+      };
+    }>;
+  };
+  centre_depot: {
+    id: number;
+    libelle_centre: string;
+    ville_centre: string;
+  };
+  centre_examen: {
+    id: number;
+    libelle_centre: string;
+    ville_centre: string;
+  };
+  historiques: Array<{
+    id: number;
+    etat: {
+      id: number;
+      libelle_etat: string;
+    };
+  }>;
+  rappel?: {
+    id: number;
+    date_rappel: string;
+    heure_rappel: string;
+    email_envoye: boolean;
+  };
+}
+
+export interface RappelData {
+  date_rappel: string;
+  heure_rappel: string;
 }

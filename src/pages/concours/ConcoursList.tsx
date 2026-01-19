@@ -26,12 +26,14 @@ const ConcoursList = () => {
           key={r.key}
           title={r.title}
           items={sections[r.key] || []}
+          rubrique={r.title}
         />
       ))}
 
       <ConcoursSlider
         title="Autres concours"
         items={sections.others || []}
+        rubrique="Autres concours"
       />
     </div>
   );

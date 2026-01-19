@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import EntranceExamCard from "@/components/EntranceExamCard";
+import { Link } from "react-router-dom";
 
 const getSlidesPerView = () => {
   if (window.innerWidth >= 1024) return 3;
@@ -9,21 +10,37 @@ const getSlidesPerView = () => {
   return 1;
 };
 
-const ConcoursSlider = ({ title, items }: { title: string; items: any[] }) => {
+const ConcoursSlider = ({
+  title,
+  rubrique,
+  items,
+}: {
+  title: string;
+  rubrique: string;
+  items: any[];
+}) => {
   const [index, setIndex] = useState(0);
 
   const slidesPerView = getSlidesPerView();
   const maxIndex = Math.max(items.length - slidesPerView, 0);
-
-  // 👉 afficher les boutons uniquement si utile
   const showControls = items.length > slidesPerView;
 
   if (!items.length) return null;
 
   return (
     <section className="space-y-6">
-      <h2 className="text-xl md:text-2xl font-bold">{title}</h2>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl md:text-2xl font-bold">{title}</h2>
+        {/* <Link
+          to={`/concours/rubrique/${rubrique}`}
+          className="text-primary underline text-sm"
+        >
+          Voir plus
+        </Link> */}
+      </div>
 
+      {/* Slider */}
       <div className="relative overflow-hidden">
         <div
           className="flex transition-transform duration-500 ease-in-out"
@@ -40,6 +57,7 @@ const ConcoursSlider = ({ title, items }: { title: string; items: any[] }) => {
         </div>
       </div>
 
+      {/* Controls */}
       {showControls && (
         <div className="flex justify-center gap-4">
           <button

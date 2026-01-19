@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import concoursReducer from "@/store/concours/concoursSlice";
 import authReducer from "@/store/auth/authSlice";
+import candidatureReducer from "./candidature/candidatureSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {
@@ -25,6 +26,7 @@ export const store = configureStore({
   reducer: {
     concours: concoursReducer,
     auth: persistedAuthReducer,
+    candidatures: candidatureReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
