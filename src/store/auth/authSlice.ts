@@ -78,6 +78,7 @@ const initialState: AuthState = {
   success: false,
   loading: false,
   error: null,
+  roles: [],
 };
 
 const authSlice = createSlice({

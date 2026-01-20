@@ -68,7 +68,7 @@ export const useAuth = () => {
    * Vérifie si l'utilisateur est un admin
    */
   const isAdmin = (): boolean => {
-    return hasAnyRole(["ADMIN", "SUPER_ADMIN"]);
+    return hasAnyRole(["ADMINISTRATEUR", "SUPER_ADMINISTRATEUR"]);
   };
 
   return {
