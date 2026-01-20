@@ -5,7 +5,7 @@ const AdminProtectedRoute = () => {
   const { user, token, isAuthenticated, isAdmin } = useAuth();
 
   // Pas connecté
-  if (!isAuthenticated || !token || !user) {
+  if (!isAuthenticated || !token) {
     return <Navigate to="/admin/login" replace />;
   }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchCentresByType } from "@/services/centreService";
+import { centreService } from "@/services/centreService";
 
 export interface Centre {
   id: number;
@@ -17,8 +17,8 @@ export const useCentres = () => {
     setLoading(true);
 
     Promise.all([
-      fetchCentresByType("CENTRE_DE_DEPÔT"),
-      fetchCentresByType("CENTRE_EXAMEN"),
+      centreService.getByType("CENTRE_DE_DEPÔT"),
+      centreService.getByType("CENTRE_EXAMEN"),
     ])
       .then(([depot, examen]) => {
         setCentresDepot(depot);
