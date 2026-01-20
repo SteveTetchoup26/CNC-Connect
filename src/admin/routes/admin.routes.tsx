@@ -3,6 +3,7 @@ import AdminAuthLayout from "../layouts/AdminAuthLayout";
 import AdminLayout from "../layouts/AdminLayout";
 import AdminLogin from "../pages/AdminLogin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
+import CentresPage from "../pages/CentresPage";
 
 export const adminRoutes: RouteObject[] = [
   {
@@ -22,13 +23,17 @@ export const adminRoutes: RouteObject[] = [
         element: <AdminProtectedRoute />,
         children: [
           {
-            path: "dashboard",
+            path: "",
             element: <AdminLayout />,
             children: [
               {
-                index: true,
+                path: "dashboard",
                 element: <div>Yooo</div>,
               },
+              {
+                path: "centres",
+                element: <CentresPage />
+              }
             ],
           },
         ],

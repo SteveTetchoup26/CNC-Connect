@@ -1,6 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { adminNavigation } from "@/config/adminNavigation";
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = {
   collapsed?: boolean;
@@ -11,6 +17,7 @@ type Props = {
 
 const SidebarContent = ({ collapsed }: { collapsed?: boolean }) => (
   <div className="p-4 space-y-4">
+    {/* Logo */}
     <h2
       className={`text-center text-lg font-semibold transition-all duration-300 ${
         collapsed ? "opacity-0 w-0 overflow-hidden" : ""
@@ -19,30 +26,49 @@ const SidebarContent = ({ collapsed }: { collapsed?: boolean }) => (
       SG
     </h2>
 
-    <NavLink
-      to="/admin/dashboard"
-      className={({ isActive }) =>
-        `flex items-center gap-2 rounded-sm text-sm transition-all duration-300 ${
-          isActive
-            ? "bg-primary text-white"
-            : "hover:bg-muted text-gray-800"
-        } ${
-          collapsed
-            ? "justify-center px-2 py-1"
-            : "px-3 py-2"
-        }`
-      }
-    >
-      <LayoutDashboard className="min-h-4 min-w-4" />
-      {!collapsed && <span>Dashboard</span>}
-    </NavLink>
+    {/* Navigation */}
+    <nav className="space-y-1">
+      {adminNavigation.map((item: any) => {
+        return (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              `
+                flex items-center rounded-sm text-sm transition-all duration-300
+                ${
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-muted text-muted-foreground"
+                }
+                ${collapsed ? "justify-center px-2 py-2" : "gap-2 px-3 py-2"}
+              `
+            }
+          >
+            {collapsed ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex items-center justify-center">
+                    <item.icon className="h-4 w-4" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent side="right">{item.label}</TooltipContent>
+              </Tooltip>
+            ) : (
+              <>
+                <item.icon className="h-4 w-4 shrink-0" />
+                <span>{item.label}</span>
+              </>
+            )}
+          </NavLink>
+        );
+      })}
+    </nav>
   </div>
 );
 
-
-
 const AdminSidebar = ({ collapsed, mobile, open, onOpenChange }: Props) => {
-  // Sidebar mobile
+  // Mobile
   if (mobile) {
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
@@ -53,7 +79,7 @@ const AdminSidebar = ({ collapsed, mobile, open, onOpenChange }: Props) => {
     );
   }
 
-  // Sidebar desktop
+  // Desktop
   return (
     <aside
       className={`h-screen border-r bg-background transition-all duration-300 flex flex-col overflow-hidden ${
