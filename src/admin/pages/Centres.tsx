@@ -27,7 +27,7 @@ import CentreFormDialog from "@/components/admin/centres/CentreFormDialog";
 import DeleteCentreDialog from "@/components/admin/centres/DeleteCentreDialog";
 import { formatCentreType } from "@/utils/formatters";
 
-const CentresPage = () => {
+const Centres = () => {
   const [centres, setCentres] = useState<Centre[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [typeFilter, setTypeFilter] = useState<string>("ALL");
@@ -214,4 +214,4 @@ const CentresPage = () => {
   );
 };
 
-export default CentresPage;
+export default Centres;
