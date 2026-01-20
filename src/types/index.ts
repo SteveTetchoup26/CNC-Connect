@@ -6,6 +6,7 @@ export interface AuthState {
   success: boolean;
   loading: boolean;
   error: string | null;
+  roles: string[];
 }
 
 export interface ConcoursState {
