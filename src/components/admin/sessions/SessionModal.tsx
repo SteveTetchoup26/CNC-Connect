@@ -23,11 +23,6 @@ import {
   type Session,
 } from "@/services/sessionService";
 
-type Etat = {
-  id: number;
-  libelle_etat: string;
-};
-
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -152,17 +147,21 @@ export const SessionModal = ({
 
           {/* État (uniquement en édition) */}
           {session && (
-            <select
-              className="w-full rounded-md border bg-background p-2"
-              value={etatId}
-              onChange={(e) => setEtatId(Number(e.target.value))}
+            <Select
+              value={etatId?.toString()}
+              onValueChange={(value) => setEtatId(Number(value))}
             >
-              {etats.map((etat) => (
-                <option key={etat.id} value={etat.id}>
-                  {etat.libelle_etat}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger>
+                <SelectValue placeholder="Etat Session" />
+              </SelectTrigger>
+              <SelectContent>
+                {etats.map((etat) => (
+                  <SelectItem key={etat.id} value={etat.id.toString()}>
+                    {etat.libelle_etat}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
 
           <div className="flex justify-end gap-2 pt-2">
