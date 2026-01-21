@@ -79,10 +79,10 @@ const AdminSidebar = ({ collapsed, mobile, open, onOpenChange }: Props) => {
     );
   }
 
-  // Desktop
+  // Desktop - Fixed position
   return (
     <aside
-      className={`h-screen border-r bg-background transition-all duration-300 flex flex-col overflow-hidden ${
+      className={`fixed left-0 top-0 h-screen border-r bg-background transition-all duration-300 flex flex-col overflow-y-auto z-40 ${
         collapsed ? "w-16" : "w-64"
       }`}
     >

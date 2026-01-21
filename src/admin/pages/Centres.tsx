@@ -9,7 +9,20 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Plus, Pencil, Trash, MoreVertical } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -27,7 +40,7 @@ import CentreFormDialog from "@/components/admin/centres/CentreFormDialog";
 import DeleteCentreDialog from "@/components/admin/centres/DeleteCentreDialog";
 import { formatCentreType } from "@/utils/formatters";
 
-const CentresPage = () => {
+const Centres = () => {
   const [centres, setCentres] = useState<Centre[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [typeFilter, setTypeFilter] = useState<string>("ALL");
@@ -64,25 +77,27 @@ const CentresPage = () => {
     return true;
   });
 
-//   /* ============================
-//      DELETE
-//   ============================ */
-//   const handleDelete = async (id: number) => {
-//     if (!confirm("Supprimer ce centre ?")) return;
-//     await centreService.delete(id);
-//     loadData();
-//   };
+  const handleEdit = (centre: Centre) => {
+    setSelectedCentre(centre);
+    setFormOpen(true);
+  };
+
+  const handleDelete = (centre: Centre) => {
+    setDeleteId(centre.id);
+    setDeleteOpen(true);
+  };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-semibold">Centres</h1>
         <Button
           onClick={() => {
             setSelectedCentre(null);
             setFormOpen(true);
           }}
+          className="w-full sm:w-auto"
         >
           <Plus className="h-4 w-4 mr-2" />
           Ajouter un centre
@@ -90,9 +105,9 @@ const CentresPage = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="w-56">
+          <SelectTrigger className="w-full sm:w-56">
             <SelectValue placeholder="Type de centre" />
           </SelectTrigger>
           <SelectContent>
@@ -103,7 +118,7 @@ const CentresPage = () => {
         </Select>
 
         <Select value={regionFilter} onValueChange={setRegionFilter}>
-          <SelectTrigger className="w-56">
+          <SelectTrigger className="w-full sm:w-56">
             <SelectValue placeholder="Région" />
           </SelectTrigger>
           <SelectContent>
@@ -117,8 +132,8 @@ const CentresPage = () => {
         </Select>
       </div>
 
-      {/* Table */}
-      <div className="rounded-lg border bg-background">
+      {/* Table - Desktop */}
+      <div className="hidden lg:block rounded-lg border bg-background">
         <Table>
           <TableHeader>
             <TableRow>
@@ -167,34 +182,111 @@ const CentresPage = () => {
                   <TableCell>{centre.region?.label_region}</TableCell>
                   <TableCell>{centre.capacite}</TableCell>
 
-                  <TableCell className="text-right space-x-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        setSelectedCentre(centre);
-                        setFormOpen(true);
-                      }}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(centre)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
 
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        setDeleteId(centre.id);
-                        setDeleteOpen(true);
-                      }}
-                    >
-                      <Trash className="h-4 w-4 text-red-600" />
-                    </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDelete(centre)}
+                      >
+                        <Trash className="h-4 w-4 text-red-600" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Cards - Mobile/Tablet */}
+      <div className="lg:hidden space-y-4">
+        {loading ? (
+          <Card>
+            <CardContent className="py-10 text-center">
+              Chargement...
+            </CardContent>
+          </Card>
+        ) : filteredCentres.length === 0 ? (
+          <Card>
+            <CardContent className="py-10 text-center">
+              Aucun centre trouvé
+            </CardContent>
+          </Card>
+        ) : (
+          filteredCentres.map((centre) => (
+            <Card key={centre.id}>
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-base truncate">
+                      {centre.libelle_centre}
+                    </CardTitle>
+                    <CardDescription className="mt-1">
+                      <Badge
+                        variant={
+                          centre.type_centre === "CENTRE_EXAMEN"
+                            ? "secondary"
+                            : "default"
+                        }
+                        className="text-xs"
+                      >
+                        {formatCentreType(centre.type_centre)}
+                      </Badge>
+                    </CardDescription>
+                  </div>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="shrink-0">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => handleEdit(centre)}>
+                        <Pencil className="h-4 w-4 mr-2" />
+                        Modifier
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => handleDelete(centre)}
+                        className="text-red-600"
+                      >
+                        <Trash className="h-4 w-4 mr-2" />
+                        Supprimer
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-2">
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Ville:</span>
+                    <p className="font-medium">{centre.ville_centre}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Région:</span>
+                    <p className="font-medium">{centre.region?.label_region}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Capacité:</span>
+                    <p className="font-medium">{centre.capacite}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
 
       <CentreFormDialog
@@ -214,4 +306,4 @@ const CentresPage = () => {
   );
 };
 
-export default CentresPage;
+export default Centres;

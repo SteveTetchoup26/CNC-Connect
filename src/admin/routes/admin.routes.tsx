@@ -3,7 +3,10 @@ import AdminAuthLayout from "../layouts/AdminAuthLayout";
 import AdminLayout from "../layouts/AdminLayout";
 import AdminLogin from "../pages/AdminLogin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
-import CentresPage from "../pages/CentresPage";
+import Centres from "../pages/Centres";
+import Sessions from "../pages/Sessions";
+import Ecoles from "../pages/Ecoles";
+import EcoleDetails from "../pages/EcoleDetails";
 
 export const adminRoutes: RouteObject[] = [
   {
@@ -32,7 +35,19 @@ export const adminRoutes: RouteObject[] = [
               },
               {
                 path: "centres",
-                element: <CentresPage />
+                element: <Centres />
+              },
+              {
+                path: "sessions",
+                element: <Sessions />
+              },
+              {
+                path: "ecoles",
+                element: <Ecoles />
+              },
+              {
+                path: "ecoles/:id",
+                element: <EcoleDetails />
               }
             ],
           },
