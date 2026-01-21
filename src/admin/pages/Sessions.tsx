@@ -8,7 +8,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Pencil, Trash } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Plus, Pencil, Trash, MoreVertical } from "lucide-react";
 import { toast } from "sonner";
 import { sessionService, type Session } from "@/services/sessionService";
 import { DeleteSessionDialog } from "@/components/admin/sessions/DeleteSessionDialog";
@@ -51,24 +64,35 @@ const Sessions = () => {
     loadSessions();
   }, []);
 
+  const handleEdit = (session: Session) => {
+    setSelectedSession(session);
+    setOpenModal(true);
+  };
+
+  const handleDelete = (session: Session) => {
+    setSelectedSession(session);
+    setOpenDelete(true);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-xl font-semibold">Sessions</h1>
         <Button
           onClick={() => {
             setSelectedSession(null);
             setOpenModal(true);
           }}
+          className="w-full sm:w-auto"
         >
           <Plus className="mr-2 h-4 w-4" />
           Nouvelle session
         </Button>
       </div>
 
-      {/* Table */}
-      <div className="rounded-lg border bg-background">
+      {/* Table - Desktop */}
+      <div className="hidden md:block rounded-lg border bg-background">
         <Table>
           <TableHeader>
             <TableRow>
@@ -107,59 +131,25 @@ const Sessions = () => {
                     )}
                   </TableCell>
 
-                  {/* <TableCell>
-                    {etat && (
+                  <TableCell>
+                    <div className="flex gap-2">
                       <Button
-                        size="sm"
-                        variant={
-                          etat.libelle_etat === "OUVERTE"
-                            ? "default"
-                            : "secondary"
-                        }
-                        onClick={async () => {
-                          try {
-                            await sessionService.changeEtat(
-                              session.id,
-                              etat.libelle_etat === "OUVERTE"
-                                ? ETAT_FERMEE_ID
-                                : ETAT_OUVERTE_ID,
-                            );
-
-                            toast.success("État mis à jour");
-                            loadSessions();
-                          } catch {
-                            toast.error("Erreur lors du changement d’état");
-                          }
-                        }}
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(session)}
                       >
-                        {etat.libelle_etat.toLowerCase()}
+                        <Pencil className="h-4 w-4" />
                       </Button>
-                    )}
-                  </TableCell> */}
 
-                  <TableCell className="flex gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        setSelectedSession(session);
-                        setOpenModal(true);
-                      }}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-red-600"
-                      onClick={() => {
-                        setSelectedSession(session);
-                        setOpenDelete(true);
-                      }}
-                    >
-                      <Trash className="h-4 w-4" />
-                    </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-red-600"
+                        onClick={() => handleDelete(session)}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               );
@@ -169,7 +159,7 @@ const Sessions = () => {
               <TableRow>
                 <TableCell
                   colSpan={4}
-                  className="text-center text-muted-foreground"
+                  className="text-center text-muted-foreground py-10"
                 >
                   Aucune session trouvée
                 </TableCell>
@@ -177,6 +167,82 @@ const Sessions = () => {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Cards - Mobile */}
+      <div className="md:hidden space-y-4">
+        {loading ? (
+          <Card>
+            <CardContent className="py-10 text-center">
+              Chargement...
+            </CardContent>
+          </Card>
+        ) : sessions.length === 0 ? (
+          <Card>
+            <CardContent className="py-10 text-center text-muted-foreground">
+              Aucune session trouvée
+            </CardContent>
+          </Card>
+        ) : (
+          sessions.map((session) => {
+            const etat = getCurrentEtat(session);
+
+            return (
+              <Card key={session.id}>
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <CardTitle className="text-base">
+                        {session.libelle_session}
+                      </CardTitle>
+                      <CardDescription className="mt-1">
+                        {session.description_session}
+                      </CardDescription>
+                    </div>
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleEdit(session)}>
+                          <Pencil className="h-4 w-4 mr-2" />
+                          Modifier
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleDelete(session)}
+                          className="text-red-600"
+                        >
+                          <Trash className="h-4 w-4 mr-2" />
+                          Supprimer
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </CardHeader>
+
+                <CardContent>
+                  {etat && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">État:</span>
+                      <Badge
+                        variant={
+                          etat.libelle_etat === "OUVERTE"
+                            ? "default"
+                            : "secondary"
+                        }
+                      >
+                        {etat.libelle_etat.toLowerCase()}
+                      </Badge>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
       </div>
 
       <SessionModal

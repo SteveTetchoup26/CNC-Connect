@@ -23,19 +23,19 @@ const AdminHeader = ({ onMenuClick, collapsed, setCollapsed }: Props) => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="h-16 border-b bg-background flex items-center px-4 md:px-6 gap-3">
+    <header className="sticky top-0 z-30 h-16 border-b bg-background flex items-center px-4 md:px-6 gap-3">
       <Button
-  variant="ghost"
-  size="icon"
-  onClick={() => setCollapsed(!collapsed)}
-  className="hidden md:flex"
->
-  <ChevronLeft
-    className={`h-4 w-4 transition-transform ${
-      collapsed ? "rotate-180" : ""
-    }`}
-  />
-</Button>
+        variant="ghost"
+        size="icon"
+        onClick={() => setCollapsed(!collapsed)}
+        className="hidden md:flex"
+      >
+        <ChevronLeft
+          className={`h-4 w-4 transition-transform ${
+            collapsed ? "rotate-180" : ""
+          }`}
+        />
+      </Button>
 
       {/* Hamburger (mobile only) */}
       <Button
@@ -63,7 +63,7 @@ const AdminHeader = ({ onMenuClick, collapsed, setCollapsed }: Props) => {
 
           <SheetContent side="top" className="h-auto p-3">
             <div className="relative mt-6">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground " />
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Rechercher..." className="pl-9" />
             </div>
           </SheetContent>
@@ -76,8 +76,9 @@ const AdminHeader = ({ onMenuClick, collapsed, setCollapsed }: Props) => {
           size="icon"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         >
-          {theme === "dark" ? <Sun /> : <Moon />}
+          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
+        
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
           <Badge className="absolute -top-1 -right-1 h-5 min-w-[20px] px-1 text-xs flex items-center justify-center">

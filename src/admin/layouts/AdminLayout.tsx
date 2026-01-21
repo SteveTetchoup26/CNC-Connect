@@ -7,20 +7,26 @@ const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
-
   return (
     <div className="min-h-screen flex bg-muted/40">
-      {/* Sidebar desktop */}
+      {/* Sidebar desktop - Fixed */}
       <div className="hidden md:block">
-        <AdminSidebar collapsed={collapsed}  />
+        <AdminSidebar collapsed={collapsed} />
       </div>
 
-      {/* Main */}
-      <div className="flex-1 flex flex-col">
-        <AdminHeader onMenuClick={() => setSidebarOpen(true)} collapsed={collapsed}
-  setCollapsed={setCollapsed} />
+      {/* Main content area avec margin-left pour compenser la sidebar fixed */}
+      <div 
+        className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${
+          collapsed ? "md:ml-16" : "md:ml-64"
+        }`}
+      >
+        <AdminHeader 
+          onMenuClick={() => setSidebarOpen(true)} 
+          collapsed={collapsed}
+          setCollapsed={setCollapsed} 
+        />
 
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 overflow-auto">
           <Outlet />
         </main>
       </div>
