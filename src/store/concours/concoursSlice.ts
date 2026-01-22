@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchConcours, fetchConcoursById  } from "../../services/concoursService";
 import type { ConcoursState, FetchConcoursParams } from "@/types";
+import { concoursService } from "@/services/concoursService";
 
 export const getConcours = createAsyncThunk(
   "concours/getAll",
   async (params: FetchConcoursParams, thunkAPI) => {
     try {
-      return await fetchConcours(params);
+      return await concoursService.getAll(params);
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Erreur de chargement"
@@ -20,7 +20,7 @@ export const getConcoursById = createAsyncThunk(
   "concours/getById",
   async (id: number | string, thunkAPI) => {
     try {
-      return await fetchConcoursById(id);
+      return await concoursService.getById(Number(id));
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message ||

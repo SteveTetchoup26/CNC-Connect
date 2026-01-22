@@ -7,6 +7,8 @@ import Centres from "../pages/Centres";
 import Sessions from "../pages/Sessions";
 import Ecoles from "../pages/Ecoles";
 import EcoleDetails from "../pages/EcoleDetails";
+import ConcoursPage from "../pages/Concours";
+import ConcoursDetails from "../pages/ConcoursDetails";
 
 export const adminRoutes: RouteObject[] = [
   {
@@ -35,20 +37,28 @@ export const adminRoutes: RouteObject[] = [
               },
               {
                 path: "centres",
-                element: <Centres />
+                element: <Centres />,
               },
               {
                 path: "sessions",
-                element: <Sessions />
+                element: <Sessions />,
               },
               {
                 path: "ecoles",
-                element: <Ecoles />
+                element: <Ecoles />,
               },
               {
                 path: "ecoles/:id",
-                element: <EcoleDetails />
-              }
+                element: <EcoleDetails />,
+              },
+              {
+                path: "concours",
+                element: <ConcoursPage />,
+              },
+              {
+                path: "concours/:id",
+                element: <ConcoursDetails />,
+              },
             ],
           },
         ],
