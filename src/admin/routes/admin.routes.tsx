@@ -11,6 +11,8 @@ import ConcoursPage from "../pages/Concours";
 import ConcoursDetails from "../pages/ConcoursDetails";
 import CandidaturesPage from "../pages/Candidatures";
 import CandidatureDetails from "../pages/CandidatureDetails";
+import UtilisateursPage from "../pages/Utilisateurs";
+import UtilisateurDetails from "../pages/UtilisateurDetails";
 
 export const adminRoutes: RouteObject[] = [
   {
@@ -68,6 +70,14 @@ export const adminRoutes: RouteObject[] = [
               {
                 path: "candidatures/:id",
                 element: <CandidatureDetails />,
+              },
+              {
+                path: "users",
+                element: <UtilisateursPage />,
+              },
+              {
+                path: "users/:id",
+                element: <UtilisateurDetails />,
               },
             ],
           },
