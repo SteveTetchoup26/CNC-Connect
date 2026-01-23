@@ -98,4 +98,9 @@ export const candidatureService = {
     const { data } = await api.post(`/admin/candidatures/${id}/affecter-centres`, payload);
     return data;
   },
+
+  async getByUserId(userId: number): Promise<Candidature[]> {
+    const { data } = await api.get(`/admin/utilisateurs/${userId}/candidatures`);
+    return data;
+  },
 };
