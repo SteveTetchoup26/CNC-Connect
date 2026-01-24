@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton"; // Ajoutez cette importation
 import {
   Card,
   CardContent,
@@ -164,6 +165,86 @@ const UtilisateursPage = () => {
     );
   };
 
+  /* ============================
+     SKELETON ROWS
+  ============================ */
+  const skeletonRows = Array.from({ length: 3 }).map((_, index) => (
+    <TableRow key={`skeleton-${index}`}>
+      <TableCell>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-40" />
+        </div>
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-48" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-32" />
+      </TableCell>
+      <TableCell>
+        <div className="flex gap-1">
+          <Skeleton className="h-6 w-16 rounded-full" />
+          <Skeleton className="h-6 w-20 rounded-full" />
+        </div>
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-24" />
+      </TableCell>
+      <TableCell className="text-right">
+        <div className="flex justify-end gap-2">
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </TableCell>
+    </TableRow>
+  ));
+
+  /* ============================
+     SKELETON CARDS (MOBILE)
+  ============================ */
+  const skeletonCards = Array.from({ length: 3 }).map((_, index) => (
+    <Card key={`skeleton-card-${index}`}>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex-1 min-w-0 space-y-2">
+            <Skeleton className="h-5 w-40" />
+            <div className="flex gap-1">
+              <Skeleton className="h-6 w-16 rounded-full" />
+              <Skeleton className="h-6 w-20 rounded-full" />
+            </div>
+          </div>
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-4 rounded" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-4 rounded" />
+          <Skeleton className="h-4 w-32" />
+        </div>
+        <div className="pt-2">
+          <Skeleton className="h-3 w-32" />
+        </div>
+      </CardContent>
+    </Card>
+  ));
+
+  /* ============================
+     SKELETON FILTERS
+  ============================ */
+  const skeletonFilters = (
+    <div className="flex flex-col sm:flex-row gap-4">
+      <div className="relative flex-1">
+        <Skeleton className="h-10 w-full rounded-md" />
+      </div>
+      <Skeleton className="h-10 w-full sm:w-56 rounded-md" />
+    </div>
+  );
+
   return (
     <div className="space-y-6">
       {/* ============================
@@ -173,7 +254,11 @@ const UtilisateursPage = () => {
         <div>
           <h1 className="text-2xl font-semibold">Utilisateurs</h1>
           <p className="text-muted-foreground">
-            {filteredUtilisateurs.length} utilisateur(s)
+            {loading ? (
+              <Skeleton className="h-4 w-32 mt-1" />
+            ) : (
+              `${filteredUtilisateurs.length} utilisateur(s)`
+            )}
           </p>
         </div>
         <Button
@@ -191,31 +276,35 @@ const UtilisateursPage = () => {
       {/* ============================
          FILTERS
       ============================ */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Rechercher par nom, prénom ou email..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
-          />
-        </div>
+      {loading ? (
+        skeletonFilters
+      ) : (
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Rechercher par nom, prénom ou email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
 
-        <Select value={roleFilter} onValueChange={setRoleFilter}>
-          <SelectTrigger className="w-full sm:w-56">
-            <SelectValue placeholder="Rôle" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tous les rôles</SelectItem>
-            {roles.map((role) => (
-              <SelectItem key={role.id} value={String(role.id)}>
-                {role.libelle}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+          <Select value={roleFilter} onValueChange={setRoleFilter}>
+            <SelectTrigger className="w-full sm:w-56">
+              <SelectValue placeholder="Rôle" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tous les rôles</SelectItem>
+              {roles.map((role) => (
+                <SelectItem key={role.id} value={String(role.id)}>
+                  {role.libelle}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       {/* ============================
          TABLE - DESKTOP
@@ -235,11 +324,7 @@ const UtilisateursPage = () => {
 
           <TableBody>
             {loading ? (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center py-10">
-                  Chargement...
-                </TableCell>
-              </TableRow>
+              skeletonRows
             ) : filteredUtilisateurs.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-10">
@@ -307,11 +392,7 @@ const UtilisateursPage = () => {
       ============================ */}
       <div className="lg:hidden space-y-4">
         {loading ? (
-          <Card>
-            <CardContent className="py-10 text-center">
-              Chargement...
-            </CardContent>
-          </Card>
+          skeletonCards
         ) : filteredUtilisateurs.length === 0 ? (
           <Card>
             <CardContent className="py-10 text-center">

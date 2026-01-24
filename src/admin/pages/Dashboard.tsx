@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton"; // Ajoutez cette importation
 import {
   Users,
   FileText,
@@ -81,7 +82,10 @@ const Dashboard = () => {
       VALIDEE: { variant: "default", icon: CheckCircle },
     };
 
-    const config = variants[statut] || { variant: "secondary", icon: AlertCircle };
+    const config = variants[statut] || {
+      variant: "secondary",
+      icon: AlertCircle,
+    };
     const Icon = config.icon;
 
     return (
@@ -102,13 +106,123 @@ const Dashboard = () => {
 
   const PIE_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
+  /* ============================
+     SKELETONS
+  ============================ */
+  const skeletonCards = (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <Card key={`skeleton-card-${index}`}>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-4" />
+          </CardHeader>
+          <CardContent>
+            <Skeleton className="h-8 w-16 mb-2" />
+            <Skeleton className="h-3 w-32" />
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+
+  const skeletonLists = (
+    <div className="grid gap-6 md:grid-cols-2">
+      {/* Concours actifs skeleton */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-4 w-48" />
+            </div>
+            <Skeleton className="h-8 w-24" />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="flex items-start justify-between p-3 border rounded-lg"
+              >
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-40" />
+                  <Skeleton className="h-3 w-32" />
+                  <Skeleton className="h-3 w-48" />
+                </div>
+                <Skeleton className="h-6 w-16" />
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Candidatures récentes skeleton */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-40" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+            <Skeleton className="h-8 w-24" />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="flex items-start justify-between p-3 border rounded-lg"
+              >
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-40" />
+                  <Skeleton className="h-3 w-48" />
+                  <Skeleton className="h-3 w-32" />
+                </div>
+                <Skeleton className="h-6 w-20 rounded-full" />
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Chargement du dashboard...</p>
+      <div className="space-y-6">
+        {/* Header skeleton */}
+        <div>
+          <h1 className="text-3xl font-bold">Tableau de bord</h1>
+          <p className="text-muted-foreground">
+            Vue d'ensemble de la plateforme de gestion des concours
+          </p>
         </div>
+
+        {/* Stats Cards skeleton */}
+        {skeletonCards}
+
+        {/* Graphiques skeleton (placeholders) */}
+        <div className="grid gap-6 md:grid-cols-2">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Card key={`skeleton-chart-${index}`}>
+              <CardHeader>
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-48" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-64 w-full" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Lists skeleton */}
+        {skeletonLists}
       </div>
     );
   }
@@ -157,9 +271,7 @@ const Dashboard = () => {
             <div className="text-2xl font-bold text-yellow-600">
               {stats.candidatures_en_attente}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              À traiter
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">À traiter</p>
           </CardContent>
         </Card>
 
@@ -215,9 +327,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.total_ecoles}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Établissements
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Établissements</p>
           </CardContent>
         </Card>
 
@@ -302,7 +412,10 @@ const Dashboard = () => {
                   {data.candidatures_par_statut.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={COLORS[entry.statut as keyof typeof COLORS] || PIE_COLORS[index]}
+                      fill={
+                        COLORS[entry.statut as keyof typeof COLORS] ||
+                        PIE_COLORS[index]
+                      }
                     />
                   ))}
                 </Pie>
@@ -323,7 +436,12 @@ const Dashboard = () => {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={data.candidatures_par_ecole}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="libelle_ecole" angle={-45} textAnchor="end" height={100} />
+                <XAxis
+                  dataKey="libelle_ecole"
+                  angle={-45}
+                  textAnchor="end"
+                  height={100}
+                />
                 <YAxis />
                 <Tooltip />
                 <Bar dataKey="total" fill="#3b82f6" />
@@ -342,7 +460,12 @@ const Dashboard = () => {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={data.candidatures_par_concours}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="libelle_concours" angle={-45} textAnchor="end" height={100} />
+                <XAxis
+                  dataKey="libelle_concours"
+                  angle={-45}
+                  textAnchor="end"
+                  height={100}
+                />
                 <YAxis />
                 <Tooltip />
                 <Bar dataKey="total" fill="#10b981" />
@@ -397,7 +520,9 @@ const Dashboard = () => {
                     </div>
                     <Badge
                       variant={
-                        concours.jours_restants <= 7 ? "destructive" : "secondary"
+                        concours.jours_restants <= 7
+                          ? "destructive"
+                          : "secondary"
                       }
                     >
                       {concours.jours_restants} jrs restants
@@ -437,7 +562,9 @@ const Dashboard = () => {
                   <div
                     key={candidature.id}
                     className="flex items-start justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
-                    onClick={() => navigate(`/admin/candidatures/${candidature.id}`)}
+                    onClick={() =>
+                      navigate(`/admin/candidatures/${candidature.id}`)
+                    }
                   >
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate">

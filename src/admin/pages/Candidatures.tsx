@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton"; // Ajoutez cette importation
 import {
   Card,
   CardContent,
@@ -158,6 +159,84 @@ const CandidaturesPage = () => {
     return <Badge variant={config.variant}>{config.label}</Badge>;
   };
 
+  /* ============================
+     SKELETON ROWS
+  ============================ */
+  const skeletonRows = Array.from({ length: 3 }).map((_, index) => (
+    <TableRow key={`skeleton-${index}`}>
+      <TableCell>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-40" />
+        </div>
+      </TableCell>
+      <TableCell>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-3 w-32" />
+        </div>
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-24" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-6 w-20 rounded-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-16" />
+      </TableCell>
+      <TableCell className="text-right">
+        <div className="flex justify-end gap-2">
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </TableCell>
+    </TableRow>
+  ));
+
+  /* ============================
+     SKELETON CARDS (MOBILE)
+  ============================ */
+  const skeletonCards = Array.from({ length: 3 }).map((_, index) => (
+    <Card key={`skeleton-card-${index}`}>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex-1 min-w-0 space-y-2">
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-4 w-40" />
+          </div>
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-4 w-12" />
+          <Skeleton className="h-4 w-20" />
+        </div>
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-4 w-12" />
+          <Skeleton className="h-6 w-16 rounded-full" />
+        </div>
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-4 w-12" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+      </CardContent>
+    </Card>
+  ));
+
+  /* ============================
+     SKELETON FILTERS
+  ============================ */
+  const skeletonFilters = (
+    <div className="flex flex-col sm:flex-row gap-4">
+      <Skeleton className="h-10 w-full sm:w-56" />
+      <Skeleton className="h-10 w-full sm:w-56" />
+    </div>
+  );
+
   return (
     <div className="space-y-6">
       {/* ============================
@@ -167,7 +246,11 @@ const CandidaturesPage = () => {
         <div>
           <h1 className="text-2xl font-semibold">Candidatures</h1>
           <p className="text-muted-foreground">
-            {filteredCandidatures.length} candidature(s)
+            {loading ? (
+              <Skeleton className="h-4 w-32 mt-1" />
+            ) : (
+              `${filteredCandidatures.length} candidature(s)`
+            )}
           </p>
         </div>
       </div>
@@ -175,34 +258,36 @@ const CandidaturesPage = () => {
       {/* ============================
          FILTERS
       ============================ */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <Select value={statutFilter} onValueChange={setStatutFilter}>
-          <SelectTrigger className="w-full sm:w-56">
-            <SelectValue placeholder="Statut" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tous les statuts</SelectItem>
-            <SelectItem value="EN_ATTENTE">En attente</SelectItem>
-            <SelectItem value="APPROUVEE">Approuvée</SelectItem>
-            <SelectItem value="REJETEE">Rejetée</SelectItem>
-            <SelectItem value="VALIDEE">Validée</SelectItem>
-          </SelectContent>
-        </Select>
+      {loading ? skeletonFilters : (
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Select value={statutFilter} onValueChange={setStatutFilter}>
+            <SelectTrigger className="w-full sm:w-56">
+              <SelectValue placeholder="Statut" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tous les statuts</SelectItem>
+              <SelectItem value="EN_ATTENTE">En attente</SelectItem>
+              <SelectItem value="APPROUVEE">Approuvée</SelectItem>
+              <SelectItem value="REJETEE">Rejetée</SelectItem>
+              <SelectItem value="VALIDEE">Validée</SelectItem>
+            </SelectContent>
+          </Select>
 
-        <Select value={ecoleFilter} onValueChange={setEcoleFilter}>
-          <SelectTrigger className="w-full sm:w-56">
-            <SelectValue placeholder="École" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Toutes les écoles</SelectItem>
-            {ecoles.map((ecole) => (
-              <SelectItem key={ecole.id} value={String(ecole.id)}>
-                {ecole.libelle_ecole}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+          <Select value={ecoleFilter} onValueChange={setEcoleFilter}>
+            <SelectTrigger className="w-full sm:w-56">
+              <SelectValue placeholder="École" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Toutes les écoles</SelectItem>
+              {ecoles.map((ecole) => (
+                <SelectItem key={ecole.id} value={String(ecole.id)}>
+                  {ecole.libelle_ecole}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       {/* ============================
          TABLE - DESKTOP
@@ -221,13 +306,7 @@ const CandidaturesPage = () => {
           </TableHeader>
 
           <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center py-10">
-                  Chargement...
-                </TableCell>
-              </TableRow>
-            ) : filteredCandidatures.length === 0 ? (
+            {loading ? skeletonRows : filteredCandidatures.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-10">
                   Aucune candidature trouvée
@@ -281,14 +360,6 @@ const CandidaturesPage = () => {
 
                       {candidature.historiques?.[0]?.etat?.libelle_etat === "APPROUVEE" && (
                         <>
-                          {/* <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleValider(candidature)}
-                          >
-                            <CheckCircle className="h-4 w-4 text-green-600" />
-                          </Button> */}
-
                           <Button
                             variant="ghost"
                             size="icon"
@@ -328,11 +399,7 @@ const CandidaturesPage = () => {
       ============================ */}
       <div className="lg:hidden space-y-4">
         {loading ? (
-          <Card>
-            <CardContent className="py-10 text-center">
-              Chargement...
-            </CardContent>
-          </Card>
+          skeletonCards
         ) : filteredCandidatures.length === 0 ? (
           <Card>
             <CardContent className="py-10 text-center">
@@ -367,7 +434,7 @@ const CandidaturesPage = () => {
                       </DropdownMenuItem>
                       {candidature.historiques?.[0]?.etat?.libelle_etat === "APPROUVEE" && (
                         <>
-                          {/* <DropdownMenuItem onClick={() => handleValider(candidature)}>
+                         {/* <DropdownMenuItem onClick={() => handleValider(candidature)}>
                             <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
                             Valider
                           </DropdownMenuItem> */}
