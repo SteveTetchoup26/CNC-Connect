@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -8,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton"; // Ajoutez cette importation
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Card,
   CardContent,
@@ -22,7 +23,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Plus, Pencil, Trash, Eye, FileText, MoreVertical } from "lucide-react";
+import { 
+  Plus, 
+  Pencil, 
+  Trash, 
+  Eye, 
+  FileText, 
+  MoreVertical, 
+  Download,
+  FileUp,
+  FileSpreadsheet 
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { concoursService } from "@/services/concoursService";
 import type { Concours } from "@/types/concours";
@@ -38,6 +49,7 @@ const ConcoursPage = () => {
 
   const [concours, setConcours] = useState<Concours[]>([]);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
 
   /* ============================
      MODALS
@@ -91,6 +103,45 @@ const ConcoursPage = () => {
   const handleSpecification = (concours: Concours) => {
     setSpecConcoursId(concours.id);
     setSpecOpen(true);
+  };
+
+  /* ============================
+     EXPORT ACTIONS
+  ============================ */
+  const handleExportPdf = async () => {
+    try {
+      setExporting(true);
+      
+      const params = { raw: true };
+      const blob = await concoursService.exportPdf(params);
+    
+      const filename = `concours-export-${new Date().toISOString().slice(0,10)}.pdf`;
+      
+      await concoursService.downloadBlob(blob, filename);
+      
+      toast.success("PDF exporté avec succès");
+    } catch (error: any) {
+      console.error("Erreur lors de l'export PDF:", error);
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleExportExcel = async () => {
+    try {
+      setExporting(true);
+      const params = { raw: true };
+      const blob = await concoursService.exportExcel(params);
+      const filename = `concours-export-${new Date().toISOString().slice(0,10)}.xlsx`;
+      
+      await concoursService.downloadBlob(blob, filename);
+      
+      toast.success("Fichier Excel exporté avec succès");
+    } catch (error: any) {
+      console.error("Erreur lors de l'export Excel:", error);
+    } finally {
+      setExporting(false);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -172,16 +223,51 @@ const ConcoursPage = () => {
       ============================ */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-semibold">Concours</h1>
-        <Button
-          onClick={() => {
-            setSelectedConcours(null);
-            setFormOpen(true);
-          }}
-          className="w-full sm:w-auto"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Ajouter un concours
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          {/* Bouton Export */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="w-full sm:w-auto"
+                disabled={exporting}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                {exporting ? "Export en cours..." : "Exporter"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem 
+                onClick={handleExportPdf}
+                disabled={exporting}
+                className="cursor-pointer"
+              >
+                <FileUp className="h-4 w-4 mr-2 text-red-500" />
+                Exporter en PDF
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={handleExportExcel}
+                disabled={exporting}
+                className="cursor-pointer"
+              >
+                <FileSpreadsheet className="h-4 w-4 mr-2 text-green-500" />
+                Exporter en Excel
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Bouton Ajouter */}
+          <Button
+            onClick={() => {
+              setSelectedConcours(null);
+              setFormOpen(true);
+            }}
+            className="w-full sm:w-auto"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Ajouter un concours
+          </Button>
+        </div>
       </div>
 
       {/* ============================

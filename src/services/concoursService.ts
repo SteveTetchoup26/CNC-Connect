@@ -12,18 +12,6 @@ import {
 /* ==== CONCOURS ======= */
 /* ===================== */
 
-
-// export const fetchConcours = async (params: FetchConcoursParams) => {
-//   const response = await api.get("/concours", { params });
-//   return response.data;
-// };
-
-// export const fetchConcoursById = async (id: number | string) => {
-//   const response = await api.get(`/concours/${id}`);
-//   console.log(response.data)
-//   return response.data;
-// };
-
 export const concoursService = {
   async getAll(params?: FetchConcoursParams): Promise<any> {
     const { data } = await api.get("/concours", { params });
@@ -52,6 +40,54 @@ export const concoursService = {
   async getOpenConcours(): Promise<Concours[]> {
     const { data } = await api.get("/admin/concours/open");
     return data;
+  },
+
+  /* ===================== */
+  /* ==== EXPORTS ======== */
+  /* ===================== */
+
+  /**
+   * Export des concours en PDF
+   */
+  async exportPdf(params?: FetchConcoursParams): Promise<Blob> {
+    const response = await api.get("/admin/concours/export/pdf", {
+      params,
+      responseType: "blob",
+    });
+    return response.data;
+  },
+
+  /**
+   * Export des concours en Excel
+   */
+  async exportExcel(params?: FetchConcoursParams): Promise<Blob> {
+    const response = await api.get("/admin/concours/export/excel", {
+      params,
+      responseType: "blob",
+    });
+    return response.data;
+  },
+
+  /**
+   * Télécharger un fichier blob
+   * Utilitaire pour gérer le téléchargement des exports
+   */
+  async downloadBlob(blob: Blob, filename: string): Promise<void> {
+    // Créer un objet URL pour le blob
+    const url = window.URL.createObjectURL(blob);
+    
+    // Créer un lien de téléchargement
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    
+    // Simuler un clic sur le lien
+    document.body.appendChild(link);
+    link.click();
+    
+    // Nettoyer
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   },
 };
 
@@ -89,4 +125,3 @@ export const specificationService = {
     return data;
   },
 };
-
