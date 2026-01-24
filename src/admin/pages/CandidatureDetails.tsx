@@ -56,7 +56,6 @@ const CandidatureDetails = () => {
       try {
         setLoading(true);
         const data = await candidatureService.getById(Number(id));
-        console.log(data)
         setCandidature(data);
       } catch (error) {
         toast.error("Erreur lors du chargement de la candidature");
