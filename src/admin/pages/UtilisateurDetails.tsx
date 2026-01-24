@@ -5,6 +5,7 @@ import { utilisateurService } from "@/services/utilisateurService";
 import { candidatureService } from "@/services/candidatureService";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton"; // Ajoutez cette importation
 import {
   Card,
   CardContent,
@@ -186,8 +187,66 @@ const UtilisateurDetails = () => {
     setAffecterOpen(true);
   };
 
+  /* ============================
+     SKELETONS
+  ============================ */
+  const skeletonHeader = (
+    <div className="space-y-6">
+      {/* Header skeleton */}
+      <div className="flex items-center gap-4">
+        <Skeleton className="h-10 w-24" />
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+      </div>
+
+      {/* Informations principales skeleton */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Informations personnelles skeleton */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-5 w-5" />
+              <Skeleton className="h-6 w-48" />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="flex items-center gap-3">
+                <Skeleton className="h-4 w-4" />
+                <div className="space-y-2 flex-1">
+                  <Skeleton className="h-3 w-16" />
+                  <Skeleton className="h-4 w-40" />
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Rôles skeleton */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-5 w-5" />
+              <Skeleton className="h-6 w-48" />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {Array.from({ length: 2 }).map((_, index) => (
+              <div key={index} className="flex items-start gap-3">
+                <Skeleton className="h-6 w-20 rounded-full" />
+                <Skeleton className="h-4 w-64 mt-1" />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+
   if (loading) {
-    return <div className="p-6">Chargement...</div>;
+    return <div className="p-6">{skeletonHeader}</div>;
   }
 
   if (!utilisateur) {
@@ -304,7 +363,58 @@ const UtilisateurDetails = () => {
           </CardHeader>
           <CardContent>
             {loadingCandidatures ? (
-              <div className="py-10 text-center">Chargement des candidatures...</div>
+              <div className="space-y-4">
+                {/* Skeleton pour le tableau desktop */}
+                <div className="hidden lg:block space-y-3">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div key={index} className="flex gap-4 p-4 border rounded-lg">
+                      <div className="flex-1 space-y-2">
+                        <Skeleton className="h-4 w-40" />
+                        <Skeleton className="h-3 w-32" />
+                      </div>
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-6 w-16 rounded-full ml-auto" />
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <Skeleton className="h-8 w-8 rounded" />
+                        <Skeleton className="h-8 w-8 rounded" />
+                        <Skeleton className="h-8 w-8 rounded" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {/* Skeleton pour les cartes mobiles */}
+                <div className="lg:hidden space-y-4">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <Card key={index}>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0 space-y-2">
+                            <Skeleton className="h-5 w-40" />
+                            <Skeleton className="h-4 w-32" />
+                          </div>
+                          <Skeleton className="h-8 w-8 rounded" />
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <Skeleton className="h-4 w-12" />
+                          <Skeleton className="h-4 w-20" />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <Skeleton className="h-4 w-12" />
+                          <Skeleton className="h-6 w-16 rounded-full" />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <Skeleton className="h-4 w-12" />
+                          <Skeleton className="h-4 w-16" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
             ) : candidatures.length === 0 ? (
               <div className="py-10 text-center text-muted-foreground">
                 Aucune candidature trouvée pour cet utilisateur

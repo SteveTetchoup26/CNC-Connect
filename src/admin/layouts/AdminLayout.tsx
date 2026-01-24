@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   return (
     <div className="min-h-screen flex bg-muted/40">

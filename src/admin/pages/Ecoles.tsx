@@ -34,6 +34,7 @@ import { useNavigate } from "react-router-dom";
 import { EcoleModal } from "@/components/admin/ecoles/EcoleModal";
 import type { Ecole } from "@/types/ecole";
 import { DeleteEcoleDialog } from "@/components/admin/ecoles/DeleteEcoleDialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Ecoles = () => {
   const navigate = useNavigate();
@@ -99,6 +100,60 @@ const Ecoles = () => {
     setDeleteOpen(true);
   };
 
+  /* ============================
+     SKELETON ROWS
+  ============================ */
+  const skeletonRows = Array.from({ length: 3 }).map((_, index) => (
+    <TableRow key={`skeleton-${index}`}>
+      <TableCell>
+        <Skeleton className="h-4 w-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-3/4" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-2/3" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-5/6" />
+      </TableCell>
+      <TableCell className="text-right">
+        <div className="flex justify-end gap-2">
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </TableCell>
+    </TableRow>
+  ));
+
+  /* ============================
+     SKELETON CARDS (MOBILE)
+  ============================ */
+  const skeletonCards = Array.from({ length: 3 }).map((_, index) => (
+    <Card key={`skeleton-card-${index}`}>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-5 w-3/4" />
+            <Skeleton className="h-4 w-1/2" />
+          </div>
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="flex items-center">
+          <Skeleton className="h-4 w-24 mr-4" />
+          <Skeleton className="h-4 flex-1" />
+        </div>
+        <div className="flex items-center">
+          <Skeleton className="h-4 w-24 mr-4" />
+          <Skeleton className="h-4 flex-1" />
+        </div>
+      </CardContent>
+    </Card>
+  ));
+
   return (
     <div className="space-y-6">
       {/* ============================
@@ -157,11 +212,7 @@ const Ecoles = () => {
 
           <TableBody>
             {loading ? (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center py-10">
-                  Chargement...
-                </TableCell>
-              </TableRow>
+              skeletonRows
             ) : filteredEcoles.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-10">
@@ -221,11 +272,7 @@ const Ecoles = () => {
       ============================ */}
       <div className="md:hidden space-y-4">
         {loading ? (
-          <Card>
-            <CardContent className="py-10 text-center">
-              Chargement...
-            </CardContent>
-          </Card>
+          skeletonCards
         ) : filteredEcoles.length === 0 ? (
           <Card>
             <CardContent className="py-10 text-center">

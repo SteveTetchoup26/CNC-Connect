@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton"; // Ajoutez cette importation
 import {
   Card,
   CardContent,
@@ -100,6 +101,70 @@ const ConcoursPage = () => {
     }
   };
 
+  /* ============================
+     SKELETON ROWS
+  ============================ */
+  const skeletonRows = Array.from({ length: 3 }).map((_, index) => (
+    <TableRow key={`skeleton-${index}`}>
+      <TableCell>
+        <Skeleton className="h-4 w-40" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-32" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-24" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-24" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-20" />
+      </TableCell>
+      <TableCell className="text-right">
+        <div className="flex justify-end gap-2">
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </TableCell>
+    </TableRow>
+  ));
+
+  /* ============================
+     SKELETON CARDS (MOBILE)
+  ============================ */
+  const skeletonCards = Array.from({ length: 3 }).map((_, index) => (
+    <Card key={`skeleton-card-${index}`}>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex-1 min-w-0 space-y-2">
+            <Skeleton className="h-5 w-40" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+          <div className="space-y-1">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <Skeleton className="h-4 w-12" />
+          <Skeleton className="h-4 w-20" />
+        </div>
+      </CardContent>
+    </Card>
+  ));
+
   return (
     <div className="space-y-6">
       {/* ============================
@@ -137,11 +202,7 @@ const ConcoursPage = () => {
 
           <TableBody>
             {loading ? (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center py-10">
-                  Chargement...
-                </TableCell>
-              </TableRow>
+              skeletonRows
             ) : concours.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-10">
@@ -223,11 +284,7 @@ const ConcoursPage = () => {
       ============================ */}
       <div className="lg:hidden space-y-4">
         {loading ? (
-          <Card>
-            <CardContent className="py-10 text-center">
-              Chargement...
-            </CardContent>
-          </Card>
+          skeletonCards
         ) : concours.length === 0 ? (
           <Card>
             <CardContent className="py-10 text-center">

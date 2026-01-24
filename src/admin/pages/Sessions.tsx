@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton"; // Ajoutez cette importation
 import {
   Table,
   TableBody,
@@ -30,7 +31,7 @@ import { Badge } from "@/components/ui/badge";
 
 const Sessions = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Changé à true par défaut
 
   const [openModal, setOpenModal] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -74,6 +75,52 @@ const Sessions = () => {
     setOpenDelete(true);
   };
 
+  /* ============================
+     SKELETON ROWS
+  ============================ */
+  const skeletonRows = Array.from({ length: 3 }).map((_, index) => (
+    <TableRow key={`skeleton-${index}`}>
+      <TableCell>
+        <Skeleton className="h-4 w-32" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-48" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-6 w-20 rounded-full" />
+      </TableCell>
+      <TableCell>
+        <div className="flex gap-2">
+          <Skeleton className="h-8 w-8 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </TableCell>
+    </TableRow>
+  ));
+
+  /* ============================
+     SKELETON CARDS (MOBILE)
+  ============================ */
+  const skeletonCards = Array.from({ length: 3 }).map((_, index) => (
+    <Card key={`skeleton-card-${index}`}>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-4 w-48" />
+          </div>
+          <Skeleton className="h-8 w-8 rounded" />
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-12" />
+          <Skeleton className="h-6 w-20 rounded-full" />
+        </div>
+      </CardContent>
+    </Card>
+  ));
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -104,58 +151,9 @@ const Sessions = () => {
           </TableHeader>
 
           <TableBody>
-            {sessions.map((session) => {
-              const etat = getCurrentEtat(session);
-
-              return (
-                <TableRow key={session.id}>
-                  <TableCell className="font-medium">
-                    {session.libelle_session}
-                  </TableCell>
-
-                  <TableCell className="text-muted-foreground">
-                    {session.description_session}
-                  </TableCell>
-
-                  <TableCell>
-                    {etat && (
-                      <Badge
-                        variant={
-                          etat.libelle_etat === "OUVERTE"
-                            ? "default"
-                            : "secondary"
-                        }
-                      >
-                        {etat.libelle_etat.toLowerCase()}
-                      </Badge>
-                    )}
-                  </TableCell>
-
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEdit(session)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-red-600"
-                        onClick={() => handleDelete(session)}
-                      >
-                        <Trash className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-
-            {!loading && sessions.length === 0 && (
+            {loading ? (
+              skeletonRows
+            ) : sessions.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={4}
@@ -164,6 +162,57 @@ const Sessions = () => {
                   Aucune session trouvée
                 </TableCell>
               </TableRow>
+            ) : (
+              sessions.map((session) => {
+                const etat = getCurrentEtat(session);
+
+                return (
+                  <TableRow key={session.id}>
+                    <TableCell className="font-medium">
+                      {session.libelle_session}
+                    </TableCell>
+
+                    <TableCell className="text-muted-foreground">
+                      {session.description_session}
+                    </TableCell>
+
+                    <TableCell>
+                      {etat && (
+                        <Badge
+                          variant={
+                            etat.libelle_etat === "OUVERTE"
+                              ? "default"
+                              : "secondary"
+                          }
+                        >
+                          {etat.libelle_etat.toLowerCase()}
+                        </Badge>
+                      )}
+                    </TableCell>
+
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEdit(session)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-600"
+                          onClick={() => handleDelete(session)}
+                        >
+                          <Trash className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>
@@ -172,11 +221,7 @@ const Sessions = () => {
       {/* Cards - Mobile */}
       <div className="md:hidden space-y-4">
         {loading ? (
-          <Card>
-            <CardContent className="py-10 text-center">
-              Chargement...
-            </CardContent>
-          </Card>
+          skeletonCards
         ) : sessions.length === 0 ? (
           <Card>
             <CardContent className="py-10 text-center text-muted-foreground">
