@@ -13,6 +13,7 @@ import CandidaturesPage from "../pages/Candidatures";
 import CandidatureDetails from "../pages/CandidatureDetails";
 import UtilisateursPage from "../pages/Utilisateurs";
 import UtilisateurDetails from "../pages/UtilisateurDetails";
+import Dashboard from "../pages/Dashboard";
 
 export const adminRoutes: RouteObject[] = [
   {
@@ -37,7 +38,7 @@ export const adminRoutes: RouteObject[] = [
             children: [
               {
                 path: "dashboard",
-                element: <div>Yooo</div>,
+                element: <Dashboard />,
               },
               {
                 path: "centres",
