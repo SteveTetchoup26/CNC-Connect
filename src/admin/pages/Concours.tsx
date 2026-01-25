@@ -21,6 +21,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { 
@@ -32,7 +33,8 @@ import {
   MoreVertical, 
   Download,
   FileUp,
-  FileSpreadsheet 
+  FileSpreadsheet,
+  Users
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { concoursService } from "@/services/concoursService";
@@ -43,6 +45,7 @@ import { DeleteConcoursDialog } from "@/components/admin/concours/DeleteConcours
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { ExportCandidatsModal } from "@/components/concours/ExportCandidatsModal";
 
 const ConcoursPage = () => {
   const navigate = useNavigate();
@@ -62,6 +65,8 @@ const ConcoursPage = () => {
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+
+  const [exportCandidatsOpen, setExportCandidatsOpen] = useState(false);
 
   /* ============================
      LOAD DATA
@@ -106,9 +111,9 @@ const ConcoursPage = () => {
   };
 
   /* ============================
-     EXPORT ACTIONS
+     EXPORT CONCOURS
   ============================ */
-  const handleExportPdf = async () => {
+  const handleExportConcoursPdf = async () => {
     try {
       setExporting(true);
       
@@ -121,13 +126,13 @@ const ConcoursPage = () => {
       
       toast.success("PDF exporté avec succès");
     } catch (error: any) {
-      console.error("Erreur lors de l'export PDF:", error);
+      console.error(error);
     } finally {
       setExporting(false);
     }
   };
 
-  const handleExportExcel = async () => {
+  const handleExportConcoursExcel = async () => {
     try {
       setExporting(true);
       const params = { raw: true };
@@ -136,9 +141,8 @@ const ConcoursPage = () => {
       
       await concoursService.downloadBlob(blob, filename);
       
-      toast.success("Fichier Excel exporté avec succès");
     } catch (error: any) {
-      console.error("Erreur lors de l'export Excel:", error);
+      console.error(error);
     } finally {
       setExporting(false);
     }
@@ -157,21 +161,11 @@ const ConcoursPage = () => {
   ============================ */
   const skeletonRows = Array.from({ length: 3 }).map((_, index) => (
     <TableRow key={`skeleton-${index}`}>
-      <TableCell>
-        <Skeleton className="h-4 w-40" />
-      </TableCell>
-      <TableCell>
-        <Skeleton className="h-4 w-32" />
-      </TableCell>
-      <TableCell>
-        <Skeleton className="h-4 w-24" />
-      </TableCell>
-      <TableCell>
-        <Skeleton className="h-4 w-24" />
-      </TableCell>
-      <TableCell>
-        <Skeleton className="h-4 w-20" />
-      </TableCell>
+      <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-20" /></TableCell>
       <TableCell className="text-right">
         <div className="flex justify-end gap-2">
           <Skeleton className="h-8 w-8 rounded" />
@@ -236,9 +230,13 @@ const ConcoursPage = () => {
                 {exporting ? "Export en cours..." : "Exporter"}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuContent align="end" className="w-56">
+              {/* Export liste concours */}
+              <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                Liste des concours
+              </div>
               <DropdownMenuItem 
-                onClick={handleExportPdf}
+                onClick={handleExportConcoursPdf}
                 disabled={exporting}
                 className="cursor-pointer"
               >
@@ -246,12 +244,27 @@ const ConcoursPage = () => {
                 Exporter en PDF
               </DropdownMenuItem>
               <DropdownMenuItem 
-                onClick={handleExportExcel}
+                onClick={handleExportConcoursExcel}
                 disabled={exporting}
                 className="cursor-pointer"
               >
                 <FileSpreadsheet className="h-4 w-4 mr-2 text-green-500" />
                 Exporter en Excel
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+
+              {/* Export liste candidats */}
+              <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                Liste des candidats
+              </div>
+              <DropdownMenuItem 
+                onClick={() => setExportCandidatsOpen(true)}
+                disabled={exporting}
+                className="cursor-pointer"
+              >
+                <Users className="h-4 w-4 mr-2 text-blue-500" />
+                Exporter par concours
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -321,7 +334,6 @@ const ConcoursPage = () => {
 
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      {/* VOIR */}
                       <Button
                         variant="ghost"
                         size="icon"
@@ -330,7 +342,6 @@ const ConcoursPage = () => {
                         <Eye className="h-4 w-4" />
                       </Button>
 
-                      {/* SPECIFICATION */}
                       <Button
                         variant="ghost"
                         size="icon"
@@ -339,7 +350,6 @@ const ConcoursPage = () => {
                         <FileText className="h-4 w-4 text-blue-600" />
                       </Button>
 
-                      {/* EDIT */}
                       <Button
                         variant="ghost"
                         size="icon"
@@ -348,7 +358,6 @@ const ConcoursPage = () => {
                         <Pencil className="h-4 w-4" />
                       </Button>
 
-                      {/* DELETE */}
                       <Button
                         variant="ghost"
                         size="icon"
@@ -473,6 +482,12 @@ const ConcoursPage = () => {
         concoursId={deleteId}
         onClose={() => setDeleteOpen(false)}
         onSuccess={loadData}
+      />
+
+      <ExportCandidatsModal
+        open={exportCandidatsOpen}
+        onOpenChange={setExportCandidatsOpen}
+        onClose={() => setExportCandidatsOpen(false)}
       />
     </div>
   );
