@@ -6,13 +6,13 @@ const GuestRoute = () => {
     (state) => state.auth
   );
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        Chargement...
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex h-screen items-center justify-center">
+  //       Chargement...
+  //     </div>
+  //   );
+  // }
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;

@@ -12,6 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "@/store/hooks";
+import { logout } from "@/store/auth/authSlice";
+import { useRef, useState } from "react";
 
 type Props = {
   onMenuClick: () => void;
@@ -21,6 +25,18 @@ type Props = {
 
 const AdminHeader = ({ onMenuClick, collapsed, setCollapsed }: Props) => {
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setIsUserMenuOpen(false);
+    setIsMenuOpen(false);
+    navigate("/admin/login");
+  };
 
   return (
     <header className="sticky top-0 z-30 h-16 border-b bg-background flex items-center px-4 md:px-6 gap-3">
@@ -76,12 +92,16 @@ const AdminHeader = ({ onMenuClick, collapsed, setCollapsed }: Props) => {
           size="icon"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         >
-          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          {theme === "dark" ? (
+            <Sun className="h-5 w-5" />
+          ) : (
+            <Moon className="h-5 w-5" />
+          )}
         </Button>
-        
+
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
-          <Badge className="absolute -top-1 -right-1 h-5 min-w-[20px] px-1 text-xs flex items-center justify-center">
+          <Badge className="absolute -top-1 -right-1 h-5 min-w-5 px-1 text-xs flex items-center justify-center">
             3
           </Badge>
         </Button>
@@ -97,7 +117,7 @@ const AdminHeader = ({ onMenuClick, collapsed, setCollapsed }: Props) => {
           <DropdownMenuContent align="end">
             <DropdownMenuItem>Mon profil</DropdownMenuItem>
             <DropdownMenuItem>Paramètres</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">
+            <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
               Déconnexion
             </DropdownMenuItem>
           </DropdownMenuContent>

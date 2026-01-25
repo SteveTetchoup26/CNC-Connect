@@ -28,15 +28,15 @@ import { getMeThunk } from "@/store/auth/authSlice";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch();
-  const { token, isAuthenticated } = useAppSelector(
+  const { token, isAuthenticated, user } = useAppSelector(
     (state) => state.auth
   );
 
   useEffect(() => {
-    if (token && !isAuthenticated) {
+    if (token  && !user) {
       dispatch(getMeThunk());
     }
-  }, [token, isAuthenticated, dispatch]);
+  }, [token, user, dispatch]);
 
   return <>{children}</>;
 };

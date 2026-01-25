@@ -33,7 +33,7 @@ const Login = () => {
     useEffect(() => {
     if (isAuthenticated && user) {
         // Exemple de redirection par rôle
-        if (user.roles?.includes("admin")) {
+        if (user.roles?.includes("ADMINISTRATEUR")) {
             navigate("/admin/dashboard");
         } else {
             navigate("/");
