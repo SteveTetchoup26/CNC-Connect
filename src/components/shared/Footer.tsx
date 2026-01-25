@@ -14,7 +14,8 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-sm leading-relaxed">
-              CNC - Connect
+              <span className='block'>CNC - Connect</span>
+              <span className='block'>Concours Nationaux au Cameroun - Connect</span>
             </p>
             <div className="flex space-x-4 pt-2">
               <a href="#" className="hover:text-secondary-hover transition-colors">

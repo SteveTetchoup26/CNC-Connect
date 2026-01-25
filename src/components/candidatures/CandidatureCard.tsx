@@ -32,6 +32,11 @@ interface Candidature {
     libelle_centre: string;
     ville_centre: string;
   };
+  historiques: Array<{
+    etat: {
+      libelle_etat: string;
+    }
+  }>
 }
 
 interface CandidatureCardProps {

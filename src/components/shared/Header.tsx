@@ -4,10 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Search,
   Bell,
-  ChevronDown,
-  LogOut,
-  Settings,
-  User,
 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/auth/authSlice";
@@ -192,7 +188,7 @@ const Header = () => {
 
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>Mon profil</DropdownMenuItem>
-                    <DropdownMenuItem>Paramètres</DropdownMenuItem>
+                    <DropdownMenuItem disabled={true}>Paramètres</DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-red-600"
                       onClick={handleLogout}

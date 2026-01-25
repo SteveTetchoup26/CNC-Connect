@@ -6,13 +6,13 @@ import FamilyInfo from "./steps/FamilyInfo";
 import SchoolInfo from "./steps/SchoolInfo";
 import PaymentInfo from "./steps/PaymentInfo";
 import CentersInfo from "./steps/CentersInfo";
-import PreviewStep from "./steps/previewStep";
 import { FormProvider, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
 import { inscriptionService } from "@/services/inscriptionService";
 import type { InscriptionData } from "@/types";
+import PreviewStep from "./steps/PreviewStep";
 
 const Stepper = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -54,32 +54,22 @@ const Stepper = () => {
     setIsSubmitting(true);
 
     try {
-      // Ajouter l'ID du concours aux données
       const dataWithConcours: InscriptionData = {
         ...data,
         concours_id: id,
       };
 
-      // Appel API
       const response = await inscriptionService.inscrireConcours(dataWithConcours);
 
-      // Afficher le toast de succès
       toast.success(response.message, {
         duration: 5000,
       });
 
-      console.log("Inscription réussie:", response);
-
-      // Rediriger vers une page de succès ou de confirmation
-      // navigate(`/concours/${id}/confirmation`, { state: { candidature: response.candidature } });
-
-      // Ou télécharger le fichier si nécessaire
       if (response.download_url) {
         window.open(response.download_url, '_blank');
       }
 
     } catch (error: any) {
-      // Afficher le toast d'erreur
       toast.error("Erreur d'inscription", {
         description: error.message || "Une erreur est survenue lors de l'inscription",
         duration: 5000,
@@ -94,7 +84,6 @@ const Stepper = () => {
   return (
     <FormProvider {...methods}>
       <div className="w-full mx-auto p-4 md:p-4">
-        {/* Stepper */}
         {!showPreview && (
           <div className="mb-10">
             <div className="flex gap-4 justify-between">
@@ -104,7 +93,7 @@ const Stepper = () => {
                   className={`
                     flex-1 min-w-32.5
                     ${index === currentStep ? "block" : "hidden"}
-                    lg:block
+                    xl:block
                   `}
                 >
                   <div
@@ -121,14 +110,13 @@ const Stepper = () => {
               ))}
             </div>
 
-            <div className="mt-2 text-center text-sm text-gray-500 lg:hidden">
+            <div className="mt-2 text-center text-sm text-gray-500 xl:hidden">
               Étape {currentStep + 1} / {steps.length}
             </div>
           </div>
         )}
 
-        {/* Form content */}
-        <div className="bg-white rounded-2xl shadow p-6 md:p-10">
+        <div className="bg-white dark:bg-transparent rounded-2xl shadow p-1 md:p-10">
           {showPreview ? (
             <>
               <h2 className="text-2xl font-bold mb-6 text-gray-900">
@@ -153,7 +141,7 @@ const Stepper = () => {
               type="button"
               onClick={prev}
               disabled={currentStep === 0 && !showPreview}
-              className="px-6 py-2 rounded-lg border disabled:opacity-50 hover:bg-gray-50 transition-colors cursor-pointer"
+              className="px-6 py-2 rounded-lg border disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors cursor-pointer"
             >
               {showPreview ? "Modifier" : "Précédent"}
             </button>

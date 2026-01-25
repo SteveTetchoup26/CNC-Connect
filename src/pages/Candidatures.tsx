@@ -43,6 +43,11 @@ interface Candidature {
     libelle_centre: string;
     ville_centre: string;
   };
+  historiques: Array<{
+    etat: {
+      libelle_etat: string;
+    }
+  }>
 }
 
 const Candidatures = () => {
@@ -75,7 +80,7 @@ const Candidatures = () => {
 
     // Filtre par statut
     if (selectedStatut !== "all") {
-      filtered = filtered.filter(c => c.statut === selectedStatut);
+      filtered = filtered.filter(c => c.historiques[0].etat.libelle_etat === selectedStatut);
     }
 
     // Filtre par école
@@ -105,7 +110,7 @@ const Candidatures = () => {
       return 0;
     });
 
-    setFilteredCandidatures(filtered);
+    setFilteredCandidatures(filtered as Candidature[]);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
     setCurrentPage(1);
   };
@@ -126,7 +131,7 @@ const Candidatures = () => {
 
   const handleTelechargerFiche = async (candidatureId: number) => {
     try {
-      const result = await dispatch(telechargerFiche(candidatureId)).unwrap();
+      await dispatch(telechargerFiche(candidatureId)).unwrap();
       // window.open(result.download_url, '_blank');
     } catch (error: any) {
       console.log(error);
@@ -135,7 +140,7 @@ const Candidatures = () => {
 
   const handleTelechargerRecu = async (candidatureId: number) => {
     try {
-      const result = await dispatch(telechargerFiche(candidatureId)).unwrap();
+      await dispatch(telechargerFiche(candidatureId)).unwrap();
       // window.open(result.download_url, '_blank');
     } catch (error: any) {
       toast.error("Erreur", {
