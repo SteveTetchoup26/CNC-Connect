@@ -8,9 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getConcours } from "@/store/concours/concoursSlice";
 import type { RootState, AppDispatch } from "@/store/store";
 import { Link, useNavigate } from "react-router-dom";
+import EntranceExamCardSkeleton from "@/components/skeletons/EntranceExamCardSkeleton";
 
 const Home = () => {
   const [index, setIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -27,6 +29,18 @@ const Home = () => {
   useEffect(() => {
     dispatch(getConcours({ raw: true }));
   }, [dispatch]);
+
+  // Gérer le responsive pour les skeletons
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    
+    handleResize(); // Appel initial
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const slidesPerView = getSlidesPerView();
   const maxIndex = Math.max(concours.length - slidesPerView, 0);
@@ -48,7 +62,7 @@ const Home = () => {
         />
 
         {/* Overlay pour améliorer la lisibilité du texte */}
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent z-0" />
+        <div className="absolute inset-0 bg-linear-to-r from-background via-background/40 to-transparent z-0" />
 
         <div className="relative container mx-auto px-4 py-16 md:py-24 z-10 min-h-screen flex items-center">
           <div className="max-w-xl space-y-6">
@@ -67,14 +81,8 @@ const Home = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
-              <Button onClick={() => navigate("/concours")} className="cursor-pointer bg-primary hover:bg-primary-hover px-5 py-3 text-base sm:text-lg w-full sm:w-auto">
+              <Button onClick={() => navigate("/concours")} className="cursor-pointer bg-primary hover:bg-primary-hover px-5 py-2 rounded-full text-base sm:text-lg w-full sm:w-auto">
                 Voir les concours
-              </Button>
-              <Button
-                variant="outline"
-                className="cursor-pointer border-secondary text-secondary hover:bg-secondary/10 px-5 py-3 text-base sm:text-lg w-full sm:w-auto"
-              >
-                Comment ça marche
               </Button>
             </div>
           </div>
@@ -86,11 +94,11 @@ const Home = () => {
           <h2 className="text-xl md:text-3xl font-bold">
             Concours <span className="text-primary">disponibles</span>
           </h2>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row md:items-center justify-between">
             <p className="text-muted-foreground mt-2 ">
               Découvrez les concours ouverts et commencez votre enrôlement.
             </p>
-            <Link to="/concours" className="underline text-primary">Voir plus</Link>
+            <Link to="/concours" className="underline text-primary text-end">Voir plus</Link>
           </div>
         </div>
         <div className="relative">
@@ -98,10 +106,27 @@ const Home = () => {
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${index * 100}%)`,
+                transform: loading ? 'none' : `translateX(-${index * 100}%)`,
               }}
             >
-              {concours.length > 0 &&
+              {loading ? (
+                // Skeletons pendant le chargement
+                Array.from({ length: isMobile ? 1 : slidesPerView }).map((_, i) => (
+                  <div
+                    key={`skeleton-${i}`}
+                    className="
+                      w-full 
+                      sm:w-1/2 
+                      lg:w-1/3 
+                      flex-shrink-0 
+                      px-3
+                    "
+                  >
+                    <EntranceExamCardSkeleton />
+                  </div>
+                ))
+              ) : concours.length > 0 ? (
+                // Vrais concours une fois chargés
                 concours.map((item: any, i: number) => (
                   <div
                     key={item.id ?? i}
@@ -115,31 +140,39 @@ const Home = () => {
                   >
                     <EntranceExamCard {...item} />
                   </div>
-                ))}
+                ))
+              ) : (
+                // Aucun concours trouvé
+                <div className="w-full text-center py-10">
+                  <p className="text-muted-foreground">Aucun concours disponible pour le moment</p>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="flex justify-center gap-4 mt-8">
-            <button
-              title="previous entrance"
-              onClick={prev}
-              disabled={index === 0}
-              className="cursor-pointer h-10 w-10 rounded-full border flex items-center justify-center
-                        disabled:opacity-40 hover:bg-muted transition"
-            >
-              <ChevronLeft />
-            </button>
+          {!loading && concours.length > 0 && (
+            <div className="flex justify-center gap-4 mt-8">
+              <button
+                title="previous entrance"
+                onClick={prev}
+                disabled={index === 0}
+                className="cursor-pointer h-10 w-10 rounded-full border flex items-center justify-center
+                          disabled:opacity-40 hover:bg-muted transition"
+              >
+                <ChevronLeft />
+              </button>
 
-            <button
-              title="next entrance"
-              onClick={next}
-              disabled={index >= maxIndex}
-              className="cursor-pointer h-10 w-10 rounded-full border flex items-center justify-center
-                        disabled:opacity-40 hover:bg-muted transition"
-            >
-              <ChevronRight />
-            </button>
-          </div>
+              <button
+                title="next entrance"
+                onClick={next}
+                disabled={index >= maxIndex}
+                className="cursor-pointer h-10 w-10 rounded-full border flex items-center justify-center
+                          disabled:opacity-40 hover:bg-muted transition"
+              >
+                <ChevronRight />
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -153,7 +186,7 @@ const Home = () => {
         <Button
           onClick={() => navigate(`/auth/register`)}
           size="lg"
-          className="cursor-pointer bg-primary hover:bg-primary-hover"
+          className="cursor-pointer bg-primary hover:bg-primary-hover rounded-sm"
         >
           Créer un compte
         </Button>

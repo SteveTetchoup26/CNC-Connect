@@ -10,11 +10,11 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <div className="bg-primary p-2 rounded-lg w-12 h-12 flex items-center justify-center">
-                <span className="text-xl md:text-2xl font-bold text-white">SE</span>
+                <span className="text-xl md:text-2xl font-bold text-white">CC</span>
               </div>
             </div>
             <p className="text-sm leading-relaxed">
-              Système de Gestion d'Enrôlement des Étudiants
+              CNC - Connect
             </p>
             <div className="flex space-x-4 pt-2">
               <a href="#" className="hover:text-secondary-hover transition-colors">
@@ -38,7 +38,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <a href="#" className="text-sm hover:text-secondary-hover transition-colors">
-                  À propos de SGEE
+                  À propos de CNC - Connect
                 </a>
               </li>
               <li>
@@ -91,16 +91,16 @@ const Footer = () => {
             <h3 className="text-white font-semibold text-lg mb-4">Besoin d'aide?</h3>
             <ul className="space-y-4">
               <li className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-secondary-hover flex-shrink-0 mt-0.5" />
-                <span className="text-sm">Yaoundé, Cameroun</span>
+                <MapPin className="w-5 h-5 text-secondary-hover shrink-0 mt-0.5" />
+                <span className="text-sm">Douala, Cameroun</span>
               </li>
               <li className="flex items-start space-x-3">
-                <Phone className="w-5 h-5 text-secondary-hover flex-shrink-0 mt-0.5" />
-                <span className="text-sm">+237 6XX XX XX XX</span>
+                <Phone className="w-5 h-5 text-secondary-hover shrink-0 mt-0.5" />
+                <span className="text-sm">+237 697 93 29 76</span>
               </li>
               <li className="flex items-start space-x-3">
-                <Mail className="w-5 h-5 text-secondary-hover flex-shrink-0 mt-0.5" />
-                <span className="text-sm">contact@sgee.cm</span>
+                <Mail className="w-5 h-5 text-secondary-hover shrink-0 mt-0.5" />
+                <span className="text-sm">contact@cncconnect.com</span>
               </li>
             </ul>
           </div>
@@ -110,7 +110,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0">
             <p className="text-sm text-center md:text-left">
-              © {new Date().getFullYear()} SGEE. Tous droits réservés.
+              © {new Date().getFullYear()} CNC - Connect. Tous droits réservés.
             </p>
             {/* <p className="text-sm text-center md:text-right">
               Développé avec ❤️ pour l'éducation

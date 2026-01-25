@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/pages/MesCandidatures.tsx
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState, AppDispatch } from "@/store/store";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -18,6 +19,8 @@ import { toast } from "sonner";
 import { getCandidatures, telechargerFiche } from "@/store/candidature/candidatureSlice";
 import CandidatureCard from "@/components/candidatures/CandidatureCard";
 import RappelDialog from "@/components/candidatures/RappelDialog";
+import CandidatureCardSkeleton from "@/components/skeletons/CandidatureCardSkeleton";
+import { useAppDispatch } from "@/store/hooks";
 
 interface Candidature {
   id: number;
@@ -43,7 +46,7 @@ interface Candidature {
 }
 
 const Candidatures = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { data: candidatures, loading } = useSelector(
     (state: RootState) => state.candidatures
   );
@@ -66,10 +69,6 @@ const Candidatures = () => {
   useEffect(() => {
     dispatch(getCandidatures());
   }, [dispatch]);
-
-  useEffect(() => {
-    applyFiltersAndSort();
-  }, [candidatures, selectedStatut, selectedEcole, sortBy, searchTerm]);
 
   const applyFiltersAndSort = () => {
     let filtered = [...candidatures];
@@ -122,27 +121,22 @@ const Candidatures = () => {
   };
 
   const handleVoirDetails = (candidature: Candidature) => {
-    // Navigation vers la page de détails
     console.log("Voir détails de la candidature:", candidature.id);
-    // navigate(`/candidatures/${candidature.id}`);
   };
 
   const handleTelechargerFiche = async (candidatureId: number) => {
     try {
       const result = await dispatch(telechargerFiche(candidatureId)).unwrap();
-      window.open(result.download_url, '_blank');
+      // window.open(result.download_url, '_blank');
     } catch (error: any) {
       console.log(error);
-      // toast.error("Erreur", {
-      //   description: error || "Impossible de télécharger la fiche"
-      // });
     }
   };
 
   const handleTelechargerRecu = async (candidatureId: number) => {
     try {
       const result = await dispatch(telechargerFiche(candidatureId)).unwrap();
-      window.open(result.download_url, '_blank');
+      // window.open(result.download_url, '_blank');
     } catch (error: any) {
       toast.error("Erreur", {
         description: error || "Impossible de télécharger le reçu"
@@ -165,94 +159,132 @@ const Candidatures = () => {
     setSearchTerm("");
   };
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center py-20">Chargement de vos candidatures...</div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    applyFiltersAndSort();
+  }, [candidatures, selectedStatut, selectedEcole, sortBy, searchTerm]);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
-      {/* Header */}
+      {/* Header avec skeleton */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Mes candidatures</h1>
-        <p className="text-gray-600">Gérez et suivez toutes vos candidatures aux concours</p>
+        {loading ? (
+          <div className="space-y-3">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+        ) : (
+          <>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              Mes candidatures
+            </h1>
+            <p className="text-gray-600">
+              Gérez et suivez toutes vos candidatures aux concours
+            </p>
+          </>
+        )}
       </div>
 
-      {/* Filtres et recherche */}
+      {/* Filtres et recherche avec skeletons */}
       <Card className="mb-6">
         <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {/* Recherche */}
-            <div className="md:col-span-2">
-              <Input
-                placeholder="Rechercher un concours ou une école..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full"
-              />
+          {loading ? (
+            // Skeletons pour les filtres
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <Skeleton className="md:col-span-2 h-10 rounded-md" />
+              <Skeleton className="h-10 rounded-md" />
+              <Skeleton className="h-10 rounded-md" />
+              <Skeleton className="h-10 rounded-md" />
+              <div className="flex items-center justify-between mt-4 md:col-span-5">
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-9 w-28" />
+              </div>
             </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                {/* Recherche */}
+                <div className="md:col-span-2">
+                  <Input
+                    placeholder="Rechercher un concours ou une école..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
 
-            {/* Filtre statut */}
-            <Select value={selectedStatut} onValueChange={setSelectedStatut}>
-              <SelectTrigger>
-                <SelectValue placeholder="Statut" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous les statuts</SelectItem>
-                <SelectItem value="EN_ATTENTE">En attente</SelectItem>
-                <SelectItem value="VALIDEE">Approuvée</SelectItem>
-                <SelectItem value="REJETEE">Rejetée</SelectItem>
-              </SelectContent>
-            </Select>
+                {/* Filtre statut */}
+                <Select value={selectedStatut} onValueChange={setSelectedStatut}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Statut" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Tous les statuts</SelectItem>
+                    <SelectItem value="EN_ATTENTE">En attente</SelectItem>
+                    <SelectItem value="APPROUVEE">Approuvée</SelectItem>
+                    <SelectItem value="REJETEE">Rejetée</SelectItem>
+                  </SelectContent>
+                </Select>
 
-            {/* Filtre école */}
-            <Select value={selectedEcole} onValueChange={setSelectedEcole}>
-              <SelectTrigger>
-                <SelectValue placeholder="École" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Toutes les écoles</SelectItem>
-                {ecoles.map((ecole) => (
-                  <SelectItem key={ecole} value={ecole || ""}>
-                    {ecole}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                {/* Filtre école */}
+                <Select value={selectedEcole} onValueChange={setSelectedEcole}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="École" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Toutes les écoles</SelectItem>
+                    {ecoles.map((ecole) => (
+                      <SelectItem key={ecole} value={ecole || ""}>
+                        {ecole}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Trier par" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="recent">Plus récent</SelectItem>
-                <SelectItem value="ancien">Plus ancien</SelectItem>
-                <SelectItem value="nom">Nom A-Z</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-48">
+                    <SelectValue placeholder="Trier par" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="recent">Plus récent</SelectItem>
+                    <SelectItem value="ancien">Plus ancien</SelectItem>
+                    <SelectItem value="nom">Nom A-Z</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-          {/* Tri et reset */}
-          <div className="flex items-center justify-between mt-4">
-
-            <Button variant="outline" size="sm" onClick={resetFilters}>
-              <X className="w-4 h-4 mr-2" />
-              Réinitialiser
-            </Button>
-          </div>
+              {/* Tri et reset */}
+              <div className="flex items-center justify-between mt-4">
+                <div className="text-sm text-gray-500">
+                  {filteredCandidatures.length} candidature{filteredCandidatures.length > 1 ? 's' : ''}
+                </div>
+                <Button variant="outline" size="sm" onClick={resetFilters}>
+                  <X className="w-4 h-4 mr-2" />
+                  Réinitialiser
+                </Button>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 
       {/* Résultats */}
-      <div className="mb-4 text-sm text-gray-600">
-        {filteredCandidatures.length} candidature{filteredCandidatures.length > 1 ? 's' : ''} trouvée{filteredCandidatures.length > 1 ? 's' : ''}
-      </div>
+      {loading ? (
+        <Skeleton className="h-6 w-48 mb-4" />
+      ) : (
+        <div className="mb-4 text-sm text-gray-600">
+          {filteredCandidatures.length} candidature{filteredCandidatures.length > 1 ? 's' : ''} trouvée{filteredCandidatures.length > 1 ? 's' : ''}
+        </div>
+      )}
 
-      {/* Liste des candidatures */}
-      {paginatedCandidatures.length === 0 ? (
+      {/* Liste des candidatures avec skeletons */}
+      {loading ? (
+        // Skeletons pour les cartes de candidatures
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <CandidatureCardSkeleton key={`skeleton-${index}`} />
+          ))}
+        </div>
+      ) : paginatedCandidatures.length === 0 ? (
         <Card>
           <CardContent className="p-12 text-center">
             <p className="text-gray-500">Aucune candidature trouvée</p>
@@ -273,8 +305,19 @@ const Candidatures = () => {
         </div>
       )}
 
-      {/* Pagination */}
-      {totalPages > 1 && (
+      {/* Pagination avec skeletons */}
+      {loading ? (
+        // Skeleton pour la pagination
+        <div className="flex items-center justify-center gap-2">
+          <Skeleton className="h-10 w-24 rounded-md" />
+          <div className="flex items-center gap-1">
+            <Skeleton className="h-10 w-10 rounded-md" />
+            <Skeleton className="h-10 w-10 rounded-md" />
+            <Skeleton className="h-10 w-10 rounded-md" />
+          </div>
+          <Skeleton className="h-10 w-24 rounded-md" />
+        </div>
+      ) : totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <Button
             variant="outline"

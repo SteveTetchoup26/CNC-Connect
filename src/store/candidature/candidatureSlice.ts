@@ -171,7 +171,6 @@ const candidatureSlice = createSlice({
 
       // Télécharger fiche
       .addCase(telechargerFiche.pending, (state) => {
-        state.loading = true;
         state.error = null;
       })
       .addCase(telechargerFiche.fulfilled, (state) => {

@@ -113,7 +113,7 @@ const RappelDialog = ({
           </p>
 
           {candidature && (
-            <div className="bg-gray-50 rounded-lg p-3">
+            <div className="bg-gray-50 dark:bg-gray-300 rounded-lg p-3">
               <p className="text-sm font-medium text-gray-900">
                 {candidature.concours.libelle_concours}
               </p>

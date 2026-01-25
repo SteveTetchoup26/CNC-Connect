@@ -1,5 +1,5 @@
 // src/components/candidatures/CandidatureCard.tsx
-import { Calendar, MapPin, Download, MoreVertical, Bell, FileText, Eye } from "lucide-react";
+import { Calendar, MapPin, Download, MoreVertical, Bell, FileText, Eye, Archive } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
 interface Candidature {
   id: number;
@@ -48,6 +49,8 @@ const CandidatureCard = ({
   onTelechargerFiche,
   onTelechargerRecu,
 }: CandidatureCardProps) => {
+   const [downloading, setDownloading] = useState(false);
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -69,6 +72,17 @@ const CandidatureCard = ({
     return <Badge className={variant.className}>{variant.label}</Badge>;
   };
 
+  const handleDownloading = async (id: number) => {
+    try {
+      setDownloading(true);
+      await onTelechargerFiche(id);
+    } catch(error) {
+      console.error(error)
+    } finally {
+      setDownloading(false);
+    }
+  }
+
   return (
     <Card className="hover:shadow-lg transition-shadow h-full flex flex-col">
       <CardHeader className="pb-3">
@@ -87,14 +101,14 @@ const CandidatureCard = ({
                 <Bell className="mr-2 h-4 w-4" />
                 Définir un rappel
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onVoirDetails(candidature)}>
-                <Eye className="mr-2 h-4 w-4" />
-                Voir les détails
+              <DropdownMenuItem disabled={true}>
+                <Archive className="mr-2 h-4 w-4" />
+                Archiver
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onTelechargerRecu(candidature.id)}>
+              {/* <DropdownMenuItem onClick={() => onTelechargerRecu(candidature.id)}>
                 <FileText className="mr-2 h-4 w-4" />
                 Télécharger le reçu
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -105,17 +119,17 @@ const CandidatureCard = ({
 
       <CardContent className="flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-3">
-          <p className="text-sm font-medium text-gray-700">
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
             {candidature.concours.concours_filieres[0]?.filiere?.departement?.ecole?.libelle_ecole}
           </p>
 
-          <div className="flex items-center text-sm text-gray-600 gap-2">
+          <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 gap-2">
             <Calendar className="h-4 w-4" />
             <span>Examen: {formatDate(candidature.concours.date_examen)}</span>
           </div>
 
-          <div className="flex items-start text-sm text-gray-600 gap-2">
-            <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
+          <div className="flex items-start text-sm text-gray-600 dark:text-gray-400 gap-2">
+            <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
             <span>
               {candidature.centre_examen.libelle_centre} — {candidature.centre_examen.ville_centre}
             </span>
@@ -123,11 +137,12 @@ const CandidatureCard = ({
         </div>
 
         <Button 
-          onClick={() => onTelechargerFiche(candidature.id)}
+          onClick={() => handleDownloading(candidature.id)}
           className="w-full bg-secondary hover:bg-secondary/90"
+          disabled={downloading}
         >
           <Download className="mr-2 h-4 w-4" />
-          Télécharger la fiche
+          {downloading ? 'Téléchargement...' : 'Télécharger la fiche'}
         </Button>
       </CardContent>
     </Card>
