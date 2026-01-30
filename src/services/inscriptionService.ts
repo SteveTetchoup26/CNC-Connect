@@ -5,30 +5,13 @@ import api from "@/api/axios";
 
 
 export const inscriptionService = {
-  async inscrireConcours(data: InscriptionData): Promise<InscriptionResponse> {
-    // Créer un FormData pour envoyer les fichiers
-    const formData = new FormData();
+  async inscrireConcours(data: FormData): Promise<InscriptionResponse> {
 
-    // Ajouter tous les champs au FormData
-    Object.keys(data).forEach((key) => {
-      const value = data[key as keyof InscriptionData];
-      
-      // Gérer les fichiers
-      if (key === 'photo' || key === 'fiche_paiement') {
-        if (value && value instanceof FileList && value.length > 0) {
-          formData.append(key, value[0]);
-        }
-      } 
-      // Gérer les autres champs
-      else if (value !== undefined && value !== null && value !== '') {
-        formData.append(key, String(value));
-      }
-    });
 
     try {
       const response = await api.post<InscriptionResponse>(
         `/inscription-concours`,
-        formData,
+        data,
         {
           headers: {
             'Content-Type': 'multipart/form-data',

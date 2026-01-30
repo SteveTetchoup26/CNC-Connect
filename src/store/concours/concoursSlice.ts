@@ -10,10 +10,10 @@ export const getConcours = createAsyncThunk(
       return await concoursService.getAll(params);
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Erreur de chargement"
+        error.response?.data?.message || "Erreur de chargement",
       );
     }
-  }
+  },
 );
 
 export const getConcoursById = createAsyncThunk(
@@ -24,17 +24,17 @@ export const getConcoursById = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message ||
-          "Erreur lors du chargement du concours"
+          "Erreur lors du chargement du concours",
       );
     }
-  }
+  },
 );
-
-
 
 const initialState: ConcoursState = {
   data: [],
   selected: null,
+  isInscrit: false,
+  candidatureId: null,
   loading: false,
   error: null,
   meta: null,
@@ -71,7 +71,9 @@ const concoursSlice = createSlice({
       })
       .addCase(getConcoursById.fulfilled, (state, action) => {
         state.loading = false;
-        state.selected = action.payload;
+        state.selected = action.payload.concours;
+        state.isInscrit = action.payload.is_inscrit;
+        state.candidatureId = action.payload.candidature_id;
       })
       .addCase(getConcoursById.rejected, (state, action) => {
         state.loading = false;

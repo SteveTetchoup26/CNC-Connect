@@ -48,7 +48,7 @@ const ConcoursDetails = () => {
       try {
         setLoading(true);
         const concoursData = await concoursService.getById(Number(id));
-        setConcours(concoursData);
+        setConcours(concoursData.concours);
 
         // Charger les spécifications si elles existent
         try {

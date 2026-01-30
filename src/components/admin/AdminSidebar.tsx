@@ -23,7 +23,7 @@ const SidebarContent = ({ collapsed }: { collapsed?: boolean }) => (
         collapsed ? "opacity-0 w-0 overflow-hidden" : ""
       }`}
     >
-      SG
+      CNC-Connect
     </h2>
 
     {/* Navigation */}

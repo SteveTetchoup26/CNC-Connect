@@ -16,6 +16,7 @@ interface Candidature {
   concours: any;
   centre_examen: any;
   centre_depot: any;
+  historiques?: any;
 }
 
 interface CandidatureState {

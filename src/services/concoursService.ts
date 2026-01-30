@@ -25,7 +25,7 @@ export const concoursService = {
     return data;
   },
 
-  async getById(id: number): Promise<Concours> {
+  async getById(id: number): Promise<any> {
     const { data } = await api.get(`/concours/${id}`);
     return data;
   },
@@ -128,31 +128,31 @@ export const concoursService = {
 
 export const specificationService = {
   async getAll(): Promise<SpecificationConcours[]> {
-    const { data } = await api.get("/admin/specifications");
+    const { data } = await api.get("/admin/spec-concours");
     return data;
   },
 
   async getByConcours(concoursId: number): Promise<SpecificationConcours> {
-    const { data } = await api.get(`/admin/specifications/concours/${concoursId}`);
+    const { data } = await api.get(`/spec-concours/concours/${concoursId}`);
     return data;
   },
 
   async create(payload: SpecificationFormData): Promise<SpecificationConcours> {
-    const { data } = await api.post("/admin/specifications", payload);
+    const { data } = await api.post("/admin/spec-concours", payload);
     return data;
   },
 
   async update(id: number, payload: Partial<SpecificationFormData>): Promise<SpecificationConcours> {
-    const { data } = await api.put(`/admin/specifications/${id}`, payload);
+    const { data } = await api.put(`/admin/spec-concours/${id}`, payload);
     return data;
   },
 
   async delete(id: number): Promise<void> {
-    await api.delete(`/admin/specifications/${id}`);
+    await api.delete(`/admin/spec-concours/${id}`);
   },
 
   async getRequiredDocuments(concoursId: number): Promise<any> {
-    const { data } = await api.get(`/admin/specifications/documents/${concoursId}`);
+    const { data } = await api.get(`/spec-concours/concours/${concoursId}/documents`);
     return data;
   },
 };
