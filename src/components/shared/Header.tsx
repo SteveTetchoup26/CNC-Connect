@@ -1,10 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Menu, Moon, Sun, X } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  Search,
-  Bell,
-} from "lucide-react";
+import { Menu, Moon, Sun, X, Search, Bell } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/auth/authSlice";
 import { useTheme } from "../theme-provider";
@@ -87,35 +83,92 @@ const Header = () => {
 
           {/* Navigation Desktop */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="nav-link dark:text-white!">
+            {/* Accueil */}
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `font-medium transition-colors hover:text-secondary ${
+                  isActive
+                    ? "text-secondary font-semibold border-b-2 border-secondary"
+                    : "text-gray-700 dark:text-white"
+                }`
+              }
+            >
               Accueil
-            </Link>
+            </NavLink>
 
             {!isAuthenticated && (
               <>
-                <Link to="#apropos" className="nav-link dark:text-white!">
+                {/* À propos */}
+                <NavLink
+                  to="/apropos"
+                  className={({ isActive }) =>
+                    `font-medium transition-colors hover:text-secondary ${
+                      isActive
+                        ? "text-secondary font-semibold border-b-2 border-secondary"
+                        : "text-gray-700 dark:text-white"
+                    }`
+                  }
+                >
                   À propos
-                </Link>
-                <Link to="#contact" className="nav-link dark:text-white!">
+                </NavLink>
+                {/* Contact */}
+                <NavLink
+                  to="/contact"
+                  className={({ isActive }) =>
+                    `font-medium transition-colors hover:text-secondary ${
+                      isActive
+                        ? "text-secondary font-semibold border-b-2 border-secondary"
+                        : "text-gray-700 dark:text-white"
+                    }`
+                  }
+                >
                   Contact
-                </Link>
+                </NavLink>
               </>
             )}
 
             {isAuthenticated && (
               <>
-                <Link to="/concours" className="nav-link dark:text-white!">
+                {/* Concours */}
+                <NavLink
+                  to="/concours"
+                  className={({ isActive }) =>
+                    `font-medium transition-colors hover:text-secondary ${
+                      isActive
+                        ? "text-secondary font-semibold border-b-2 border-secondary"
+                        : "text-gray-700 dark:text-white"
+                    }`
+                  }
+                >
                   Concours
-                </Link>
-                <Link
+                </NavLink>
+                {/* Mes candidatures */}
+                <NavLink
                   to="/mes-candidatures"
-                  className="nav-link dark:text-white!"
+                  className={({ isActive }) =>
+                    `font-medium transition-colors hover:text-secondary ${
+                      isActive
+                        ? "text-secondary font-semibold border-b-2 border-secondary"
+                        : "text-gray-700 dark:text-white"
+                    }`
+                  }
                 >
                   Mes candidatures
-                </Link>
-                <Link to="/dashboard" className="nav-link dark:text-white!">
-                  Dashboard
-                </Link>
+                </NavLink>
+                {/* FAQ */}
+                <NavLink
+                  to="/faq"
+                  className={({ isActive }) =>
+                    `font-medium transition-colors hover:text-secondary ${
+                      isActive
+                        ? "text-secondary font-semibold border-b-2 border-secondary"
+                        : "text-gray-700 dark:text-white"
+                    }`
+                  }
+                >
+                  FAQ
+                </NavLink>
               </>
             )}
           </nav>
@@ -141,6 +194,7 @@ const Header = () => {
               </>
             ) : (
               <>
+                {/* Theme Toggle */}
                 <Button
                   variant="ghost"
                   size="icon"
@@ -152,6 +206,7 @@ const Header = () => {
                     <Moon className="h-5 w-5" />
                   )}
                 </Button>
+                
                 {/* Search - Desktop only */}
                 <button
                   title="search"
@@ -170,7 +225,7 @@ const Header = () => {
 
                 {/* Notifications */}
                 <button
-                  title="search"
+                  title="notifications"
                   className="relative p-2 hover:bg-muted rounded-full transition-colors"
                 >
                   <Bell className="w-5 h-5" />
@@ -182,13 +237,20 @@ const Header = () => {
                   <DropdownMenuTrigger asChild>
                     <Avatar className="cursor-pointer">
                       <AvatarImage src="/avatar.png" />
-                      <AvatarFallback>{ user?.prenom?.charAt(0) }{ user?.nom?.charAt(0) }</AvatarFallback>
+                      <AvatarFallback>
+                        {user?.prenom?.charAt(0)}
+                        {user?.nom?.charAt(0)}
+                      </AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Mon profil</DropdownMenuItem>
-                    <DropdownMenuItem disabled={true}>Paramètres</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/mon-profil")}>
+                      Mon profil
+                    </DropdownMenuItem>
+                    <DropdownMenuItem disabled={true}>
+                      Paramètres
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-red-600"
                       onClick={handleLogout}
@@ -210,7 +272,7 @@ const Header = () => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -100, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden fixed left-0 right-0 bg-white dark:bg-black shadow-lg border-t border-gray-100 z-50"
+              className="md:hidden fixed left-0 right-0 bg-white dark:bg-black shadow-lg border-t border-gray-100 dark:border-gray-800 z-50"
               style={{ top: "4rem" }}
             >
               <div className="px-4 py-4 max-h-[calc(100vh-4rem)] overflow-y-auto">
@@ -225,56 +287,93 @@ const Header = () => {
                     </Link>
                   </div>
 
-                  <Link
+                  {/* Liens mobiles */}
+                  <NavLink
                     to="/"
-                    className="text-gray-700 dark:text-white! hover:text-primary font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted"
+                    className={({ isActive }) =>
+                      `font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted ${
+                        isActive
+                          ? "text-secondary bg-secondary/10 dark:text-white"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`
+                    }
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Accueil
-                  </Link>
+                  </NavLink>
 
                   {!isAuthenticated && (
                     <>
-                      <Link
-                        to="#apropos"
-                        className="text-gray-700 dark:text-white! hover:text-primary font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted"
+                      <NavLink
+                        to="/apropos"
+                        className={({ isActive }) =>
+                          `font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted ${
+                            isActive
+                              ? "text-secondary bg-secondary/10 dark:text-white"
+                              : "text-gray-700 dark:text-gray-300"
+                          }`
+                        }
                         onClick={() => setIsMenuOpen(false)}
                       >
                         À propos
-                      </Link>
-                      <Link
-                        to="#contact"
-                        className="text-gray-700 dark:text-white! hover:text-primary font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted"
+                      </NavLink>
+                      <NavLink
+                        to="/contact"
+                        className={({ isActive }) =>
+                          `font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted ${
+                            isActive
+                              ? "text-secondary bg-secondary/10 dark:text-white"
+                              : "text-gray-700 dark:text-gray-300"
+                          }`
+                        }
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Contact
-                      </Link>
+                      </NavLink>
                     </>
                   )}
 
                   {isAuthenticated && (
                     <>
-                      <Link
+                      <NavLink
                         to="/concours"
-                        className="text-gray-700 hover:text-primary dark:text-white! font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted"
+                        className={({ isActive }) =>
+                          `font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted ${
+                            isActive
+                              ? "text-secondary bg-secondary/10 dark:text-white"
+                              : "text-gray-700 dark:text-gray-300"
+                          }`
+                        }
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Concours
-                      </Link>
-                      <Link
-                        to="/mes-inscriptions"
-                        className="text-gray-700 hover:text-primary dark:text-white! font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted"
+                      </NavLink>
+                      <NavLink
+                        to="/mes-candidatures"
+                        className={({ isActive }) =>
+                          `font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted ${
+                            isActive
+                              ? "text-secondary bg-secondary/10 dark:text-white"
+                              : "text-gray-700 dark:text-gray-300"
+                          }`
+                        }
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        Mes inscriptions
-                      </Link>
-                      <Link
-                        to="/dashboard"
-                        className="text-gray-700 hover:text-primary dark:text-white! font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted"
+                        Mes candidatures
+                      </NavLink>
+                      <NavLink
+                        to="/faq"
+                        className={({ isActive }) =>
+                          `font-medium transition-colors py-2 px-2 rounded-lg hover:bg-muted ${
+                            isActive
+                              ? "text-secondary bg-secondary/10 dark:text-white"
+                              : "text-gray-700 dark:text-gray-300"
+                          }`
+                        }
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        Dashboard
-                      </Link>
+                        FAQ
+                      </NavLink>
                     </>
                   )}
 

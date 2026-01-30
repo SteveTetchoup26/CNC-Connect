@@ -16,6 +16,14 @@ const PersonalInfo = () => {
   const { register, control, setValue } = useFormContext();
   const [selectedRegion, setSelectedRegion] = useState<any>(null);
   const [selectedDepartement, setSelectedDepartement] = useState<any>(null);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setPhotoFile(file);
+    // Stocker le fichier dans le formulaire
+    setValue("photo", file, { shouldValidate: true });
+  };
 
   return (
     <div className="space-y-6">
@@ -209,10 +217,16 @@ const PersonalInfo = () => {
           <Input
             type="file"
             accept="image/*"
-            {...register("photo")}
+            onChange={handlePhotoChange}
             id="photo"
+            name="photo"
             className="cursor-pointer"
           />
+          {photoFile && (
+            <p className="text-sm text-green-600">
+              ✓ Fichier sélectionné: {photoFile.name}
+            </p>
+          )}
           <p className="text-sm text-muted-foreground">
             Format: JPG, PNG. Taille max: 2MB
           </p>
