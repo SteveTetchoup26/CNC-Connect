@@ -12,6 +12,8 @@ export interface AuthState {
 export interface ConcoursState {
   data: any[];
   selected: any | null;
+  isInscrit: boolean;
+  candidatureId: number | null;
   loading: boolean;
   error: string | null;
   meta: ConcoursMeta | null;

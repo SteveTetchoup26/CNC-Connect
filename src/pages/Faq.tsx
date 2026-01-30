@@ -1,6 +1,6 @@
 import { Clock } from "lucide-react";
 
-const Dashboard = () => {
+const Faq = () => {
   return (
     <div className="flex justify-center items-center h-screen">
         <Clock className="mr-2 h-10 w-10" />
@@ -9,4 +9,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Faq;

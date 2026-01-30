@@ -93,7 +93,7 @@ const CandidatureCard = ({
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1">
-            {getStatutBadge(candidature.statut)}
+            {getStatutBadge(candidature.historiques[0].etat.libelle_etat)}
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

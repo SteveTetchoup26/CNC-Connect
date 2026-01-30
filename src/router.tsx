@@ -15,7 +15,7 @@ import Candidatures from "./pages/Candidatures";
 import ConcoursList from "./pages/concours/ConcoursList";
 import ConcoursByRubrique from "./pages/concours/ConcoursByRubrique";
 import InscriptionConcours from "./pages/concours/InscriptionConcours";
-import Dashboard from "./pages/Dashboard";
+import Faq from "./pages/Faq";
 
 export default function AppRoutes() {
   return useRoutes([
@@ -35,7 +35,7 @@ export default function AppRoutes() {
         {
           element: <MainLayout />,
           children: [
-            { path: "/dashboard", element: <Dashboard /> },
+            { path: "/faq", element: <Faq /> },
             { path: "/profile", element: <div>Profile</div> },
             { path: "/mes-inscriptions", element: <div>Mes inscriptions</div> },
             { path: "/concours", element: <ConcoursList /> },

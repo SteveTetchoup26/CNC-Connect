@@ -10,14 +10,6 @@ const InscriptionConcours = () => {
         </CardHeader>
 
         <CardContent className="">
-          <div className="mb-4">
-            <p>
-              • Le processus d’inscription est découpé en 6 étapes indépendantes. Vous pouvez à tout moment revenir à l’étape précédente. La validation définitive se fera en étape 6.
-            </p>
-            <p>
-              • La présence d’une astérisque <span className="text-secondary">*</span> indique que le champ est obligatoire.
-            </p>
-          </div>
            <Stepper />
         </CardContent>
       </Card>
