@@ -115,8 +115,8 @@ const AdminHeader = ({ onMenuClick, collapsed, setCollapsed }: Props) => {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Mon profil</DropdownMenuItem>
-            <DropdownMenuItem>Paramètres</DropdownMenuItem>
+            <DropdownMenuItem disabled={true}>Mon profil</DropdownMenuItem>
+            <DropdownMenuItem disabled={true}>Paramètres</DropdownMenuItem>
             <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
               Déconnexion
             </DropdownMenuItem>
