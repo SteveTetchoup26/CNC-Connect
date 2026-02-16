@@ -146,7 +146,7 @@ const Sessions = () => {
               <TableHead>Libellé</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>État</TableHead>
-              <TableHead className="w-[120px]">Actions</TableHead>
+              <TableHead className="w-30">Actions</TableHead>
             </TableRow>
           </TableHeader>
 

@@ -245,7 +245,7 @@ const Header = () => {
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => navigate("/mon-profil")}>
+                    <DropdownMenuItem disabled={true} onClick={() => navigate("/mon-profil")}>
                       Mon profil
                     </DropdownMenuItem>
                     <DropdownMenuItem disabled={true}>

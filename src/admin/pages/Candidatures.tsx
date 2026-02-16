@@ -34,8 +34,7 @@ import {
 import { 
   Eye, 
   Trash, 
-  MoreVertical, 
-  CheckCircle, 
+  MoreVertical,  
   XCircle,
   MapPin
 } from "lucide-react";
@@ -118,10 +117,10 @@ const CandidaturesPage = () => {
     navigate(`/admin/candidatures/${candidature.id}`);
   };
 
-  const handleValider = (candidature: Candidature) => {
-    setSelectedCandidature(candidature);
-    setValiderOpen(true);
-  };
+  // const handleValider = (candidature: Candidature) => {
+  //   setSelectedCandidature(candidature);
+  //   setValiderOpen(true);
+  // };
 
   const handleRejeter = (candidature: Candidature) => {
     setSelectedCandidature(candidature);
@@ -358,7 +357,7 @@ const CandidaturesPage = () => {
                         <Eye className="h-4 w-4" />
                       </Button>
 
-                      {candidature.historiques?.[0]?.etat?.libelle_etat === "APPROUVEE" && (
+                      {/* {candidature.historiques?.[0]?.etat?.libelle_etat === "EN_ATTENTE" && ( */}
                         <>
                           <Button
                             variant="ghost"
@@ -368,7 +367,7 @@ const CandidaturesPage = () => {
                             <XCircle className="h-4 w-4 text-red-600" />
                           </Button>
                         </>
-                      )}
+                      {/* )} */}
 
                       <Button
                         variant="ghost"
@@ -469,11 +468,11 @@ const CandidaturesPage = () => {
                   <span className="text-muted-foreground">Statut:</span>
                   {getStatutBadge(candidature.statut)}
                 </div>
-                {(candidature.code_candidat_def || candidature.code_candidat_prov) && (
+                {(candidature.code_candidat_def || candidature.code_candidat_temp) && (
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Code:</span>
                     <span className="font-mono text-xs">
-                      {candidature.code_candidat_def || candidature.code_candidat_prov}
+                      {candidature.code_candidat_def || candidature.code_candidat_temp}
                     </span>
                   </div>
                 )}

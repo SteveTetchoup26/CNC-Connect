@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AdminProtectedRoute = () => {
-  const { user, token, isAuthenticated, isAdmin } = useAuth();
+  const { token, isAuthenticated, isAdmin } = useAuth();
 
   // Pas connecté
   if (!isAuthenticated || !token) {
