@@ -1,4 +1,4 @@
-# 🎓 CNC-Connect
+# CNC-Connect
 
 Plateforme complète de gestion de concours et candidatures avec dashboard analytique, gestion multi-écoles et suivi des états en temps réel.
 
