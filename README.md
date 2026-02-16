@@ -1,75 +1,217 @@
-# React + TypeScript + Vite
+# 🎓 CNC-Connect
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plateforme complète de gestion de concours et candidatures avec dashboard analytique, gestion multi-écoles et suivi des états en temps réel.
 
-Currently, two official plugins are available:
+![React](https://img.shields.io/badge/React-18.3-blue?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-5.4-purple?logo=vite)
+![Redux](https://img.shields.io/badge/Redux_Toolkit-2.2-764ABC?logo=redux)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Table des matières
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- [Fonctionnalités](#-fonctionnalités)
+- [Technologies](#-technologies)
+- [Prérequis](#-prérequis)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [Démarrage](#-démarrage)
+- [Contribution](#-contribution)
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
+## Fonctionnalités
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Pour les Candidats
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Consultation des concours**
+  - Liste paginée avec recherche et filtres
+  - Détails complets (filières, dates, frais, documents requis)
+  - Informations bancaires pour le paiement
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Inscription aux concours**
+  - Formulaire multi-étapes (6 étapes)
+  - Validation en temps réel
+  - Prévisualisation avant soumission
+  - Upload de documents (photo, fiche de paiement)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Gestion des candidatures**
+  - Tableau de bord des candidatures
+  - Filtrage par statut, école, date
+  - Tri personnalisable
+  - Téléchargement des fiches de candidature (PDF)
+
+- **Système de rappels**
+  - Définir des rappels par email
+  - Personnalisation date/heure
+  - Notifications automatiques
+
+### Authentification
+
+- Inscription utilisateur
+- Connexion sécurisée
+- Gestion de session avec tokens JWT
+- Déconnexion
+
+---
+
+## Technologies
+
+### Core
+
+- **[React 18.3](https://react.dev/)** - Bibliothèque UI
+- **[TypeScript 5.5](https://www.typescriptlang.org/)** - Typage statique
+- **[Vite 5.4](https://vitejs.dev/)** - Build tool ultra-rapide
+
+### État et Gestion des Données
+
+- **[Redux Toolkit 2.2](https://redux-toolkit.js.org/)** - Gestion d'état globale
+- **[React Hook Form 7.53](https://react-hook-form.com/)** - Gestion de formulaires
+- **[Axios](https://axios-http.com/)** - Client HTTP
+
+### UI et Styling
+
+- **[Tailwind CSS 3.4](https://tailwindcss.com/)** - Framework CSS utility-first
+- **[shadcn/ui](https://ui.shadcn.com/)** - Composants UI réutilisables
+- **[Lucide React](https://lucide.dev/)** - Icônes modernes
+- **[Sonner](https://sonner.emilkowal.ski/)** - Notifications toast
+
+### Routing
+
+- **[React Router 6](https://reactrouter.com/)** - Navigation côté client
+
+---
+
+## Prérequis
+
+- **Node.js** >= 18.0.0
+- **pnpm** >= 9.0.0 ou **yarn** >= 1.22.0
+- **Git**
+
+---
+
+## Installation
+
+### 1. Cloner le repository
+
+```bash
+git clone https://github.com/votre-org/concours-frontend.git
+cd concours-frontend
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Installer les dépendances
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
 ```
+
+ou avec yarn :
+
+```bash
+yarn install
+```
+
+---
+
+## Configuration
+
+### 1. Variables d'environnement
+
+Créer un fichier `.env` à la racine du projet :
+
+```env
+# API Backend
+VITE_API_URL=http://localhost:8000/api/v1
+```
+
+### 2. Configuration Axios
+
+Le fichier `src/api/axios.ts` configure automatiquement :
+- Base URL depuis `VITE_API_URL`
+- Intercepteur pour ajouter le token JWT
+- Gestion globale des erreurs
+
+```typescript
+// src/api/axios.ts
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+});
+
+// Intercepteur pour ajouter le token
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default api;
+```
+
+---
+
+## Démarrage
+
+### Mode développement
+
+```bash
+pnpm run dev
+```
+
+L'application sera accessible sur `http://localhost:5173`
+
+### Build de production
+
+```bash
+pnpm run build
+```
+
+Les fichiers optimisés seront générés dans le dossier `dist/`
+
+### Prévisualiser le build
+
+```bash
+npm run preview
+```
+
+---
+
+## Contribution
+
+### Workflow Git
+
+1. Créer une branche depuis `develop`
+```bash
+git checkout develop
+git pull
+git checkout -b feature/ma-fonctionnalite
+```
+
+2. Développer et commiter
+```bash
+git add .
+git commit -m "feat: ajouter la fonctionnalité X"
+```
+
+3. Pousser et créer une Pull Request
+```bash
+git push origin feature/ma-fonctionnalite
+```
+
+### Format des commits
+
+Suivre la convention [Conventional Commits](https://www.conventionalcommits.org/) :
+
+- `feat:` Nouvelle fonctionnalité
+- `fix:` Correction de bug
+- `docs:` Documentation
+- `style:` Formatage du code
+- `refactor:` Refactorisation
+- `test:` Ajout de tests
+- `chore:` Tâches de maintenance
+
